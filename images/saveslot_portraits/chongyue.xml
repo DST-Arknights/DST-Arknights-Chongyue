@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<Atlas>
+	<Texture filename="chongyue.tex" />
+	<Elements>
+		<Element name="chongyue.tex" u1="0.00390625" u2="0.933594" v1="0.191406" v2="0.996094" />
+	</Elements>
+</Atlas>
