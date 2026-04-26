@@ -287,6 +287,9 @@ local function OnSkill3Remove(skill)
     if inst.components.combat and skill._old_attack_range and skill._old_attack_hit_range then
       inst.components.combat:SetRange(skill._old_attack_range, skill._old_attack_hit_range)
     end
+    if inst.player_classified and inst.player_classified._chongyue_skill3_attack_range then
+      inst.player_classified._chongyue_skill3_attack_range:set(0)
+    end
   end
 end
 
@@ -429,6 +432,13 @@ AddPrefabPostInit("player_classified", function(inst)
   inst:ListenForEvent("chongyue_skill3_attack_range_dirty", function()
     local value = inst._chongyue_skill3_attack_range:value()
     if inst._parent then
+      if value <= 0 then
+        if inst._chongyue_skill3_attack_range_fx then
+          inst._chongyue_skill3_attack_range_fx:Remove()
+          inst._chongyue_skill3_attack_range_fx = nil
+        end
+        return
+      end
       if not inst._chongyue_skill3_attack_range_fx then
         inst._chongyue_skill3_attack_range_fx = SpawnPrefab("reticuleaoecatapultwakeup")
         inst._chongyue_skill3_attack_range_fx.Transform:SetNoFaced()
