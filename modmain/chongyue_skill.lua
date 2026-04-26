@@ -1,5 +1,25 @@
 local ARK_CONSTANTS = require("ark_constants")
 
+RegisterControlDefinition("chongyue_skill2_levitate", {
+  duration = 2,
+  onApply = function (inst)
+    local pos = inst:GetPosition()
+    if inst.Physics then
+        inst.Physics:Teleport(pos.x, 2, pos.z)
+    else
+        inst.Transform:SetPosition(pos.x, 2, pos.z)
+    end
+  end,
+  onRemove = function (inst)
+    local pos = inst:GetPosition()
+    if inst.Physics then
+        inst.Physics:Teleport(pos.x, 0, pos.z)
+    else
+        inst.Transform:SetPosition(pos.x, 0, pos.z)
+    end
+  end
+})
+
 local function SayActivateVoice(inst)
   -- 1-4随机
   local random = math.random(1, 4)
@@ -20,6 +40,7 @@ local function GenSkillHitRecoveryEnergyListener(skill)
   end
 end
 
+local Skill1CutBulletTaskSymbol = Symbol("chongyue_skill1_cut_bullet_task")
 local function OnSkill1HitOther(inst, data)
   if not data or not data.target then return end
   local skill = inst.components.ark_skill and inst.components.ark_skill:GetSkill("chongyue_skill1") or nil
@@ -36,7 +57,11 @@ local function OnSkill1HitOther(inst, data)
     z = z + math.random() - .5
     fx.Transform:SetPosition(x, y, z)
   end
-  skill:CutBullet()
+  if inst[Skill1CutBulletTaskSymbol] then return end
+  inst[Skill1CutBulletTaskSymbol] = inst:DoTaskInTime(0, function()
+    inst[Skill1CutBulletTaskSymbol] = nil
+    skill:CutBullet()
+  end)
 end
 
 local function OnSkill1Install(skill)
@@ -176,6 +201,20 @@ local function SetupSkill3Interface(skill)
   end
 end
 
+local Skill3CutBulletTaskSymbol = Symbol("chongyue_skill3_cut_bullet_task")
+local function OnSkill3HitOther(inst, data)
+  local target = data and data.target or nil
+  if not target then return end
+  local skill = inst.components.ark_skill:GetSkill("chongyue_skill3")
+  if not skill then return end
+  if inst[Skill3CutBulletTaskSymbol] then return end
+  -- 允许一帧内重复触发. 事件延时帧保证不会连锁反应
+  inst[Skill3CutBulletTaskSymbol] = inst:DoTaskInTime(0, function()
+    inst[Skill3CutBulletTaskSymbol] = nil
+    skill:CutBullet()
+  end)
+end
+
 local function OnSkill3Install(skill)
   local inst = skill.inst
   skill.lightFx = inst:SpawnChild("firefx_light")
@@ -185,6 +224,7 @@ local function OnSkill3Install(skill)
   skill.stackFxs = {}
   SetupSkill3Interface(skill)
   skill:ListenForEvent("onhitother", GenSkillHitRecoveryEnergyListener(skill))
+  skill:ListenForEventWhileActivating("onhitother", OnSkill3HitOther)
   skill:HookFunction(inst.components.combat, "DoAttack",
     function(next, self, target, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos)
       if not target then
@@ -331,7 +371,6 @@ local skillConfig = { {
       talentDamageMultiplier = 4.8,
       aoeRange = 8,
       maxTargets = 4,
-      levitationTime = 2,
     }
   }, {
     desc = STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE[2][2],
@@ -342,7 +381,6 @@ local skillConfig = { {
       talentDamageMultiplier = 6.5,
       aoeRange = 8,
       maxTargets = 4,
-      levitationTime = 2,
     }
   } }
 }, {

@@ -92,8 +92,8 @@ local function OnNewSpawn(inst) --玩家初次降临时
   inst.components.ark_skill:AddSkill("chongyue_skill1")
   inst.components.ark_skill:AddSkill("chongyue_skill2")
   inst.components.ark_skill:AddSkill("chongyue_skill3")
-  inst.components.ark_talent:AddTalent("an_end_to_war")
-  inst.components.ark_talent:AddTalent("all_are_guests")
+  inst.components.ark_talent:AddTalent("chongyue_talent1")
+  inst.components.ark_talent:AddTalent("chongyue_talent2")
 end
 ----
 local CommonPostInit = function(inst)
@@ -137,11 +137,11 @@ local MasterPostInit = function(inst)
     eliteLevelMap = { [3] = 1 }
   })
   inst:AddComponent("ark_talent")
-  inst.components.ark_talent:DeclareBuiltin("an_end_to_war", {
+  inst.components.ark_talent:DeclareBuiltin("chongyue_talent1", {
     requiredElite = 2,
     eliteLevelMap = { [2] = 1, [3] = 2 },
   })
-  inst.components.ark_talent:DeclareBuiltin("all_are_guests", {
+  inst.components.ark_talent:DeclareBuiltin("chongyue_talent2", {
     requiredElite = 3,
     eliteLevelMap = { [3] = 1 },
   })

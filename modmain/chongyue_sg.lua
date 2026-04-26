@@ -58,10 +58,6 @@ AddStategraphPostInit("wilson_client", function(sg)
   end
 end)
 
-local function LevitationTarget(target, time)
-  -- TODO: 使用束缚组件
-end
-
 local AOE_MUST_TAGS = { "_combat" }
 local AOE_CANT_TAGS = { "INLIMBO", "wall", "companion", "DECOR", "invisible", "notarget", "noattack", "playerghost",
   "player" }
@@ -74,8 +70,9 @@ local function ChongyueSkill2AoeAttack(inst, range, validFn, damageMultiplier)
   for i, ent in ipairs(targets) do
     if inst.replica.combat:IsValidTarget(ent) and (not validFn or validFn(ent)) then
       table.insert(validTargets, ent)
+      local targetDamageMultiplier = FunctionOrValue(damageMultiplier, ent)
       local dmg, spdmg = inst.components.combat:CalcDamage(ent, weapon, inst.components.combat.areahitdamagepercent)
-      dmg = dmg * damageMultiplier
+      dmg = dmg * (targetDamageMultiplier or 1)
       inst:PushEvent("onareaattackother", { target = ent, weapon = weapon, stimuli = nil })
       ent.components.combat:GetAttacked(inst, dmg, weapon, nil, spdmg)
     end
@@ -125,7 +122,7 @@ local chongyue_skill2 = State({
           if inst.replica.combat:IsValidTarget(ent) then
             if talent1:IsMarkedTarget(ent) then
               table.insert(talent1MarkedEntities, ent)
-              LevitationTarget(ent, params.levitationTime)
+              ApplyControl(ent, "chongyue_skill2_levitate", 0.5)
             end
             talent1:MarkTarget(ent)
           end
@@ -142,13 +139,15 @@ local chongyue_skill2 = State({
       local fx2 = SpawnPrefab("chongyue_skill2_fx_down")
       fx2.Transform:SetPosition(x, y, z)
       -- 第二段伤害
-      local targets = ChongyueSkill2AoeAttack(inst, params.aoeRange, function(ent)
-        return not table.contains(talent1MarkedEntities, ent)
-      end, params.aoeDamageMultiplier / 2) -- 两段伤害所以减半
-      local skill1 = inst.components.ark_skill and inst.components.ark_skill:GetSkill("chongyue_skill1")
+      local targets = ChongyueSkill2AoeAttack(inst, params.aoeRange, nil, function(ent)
+        local damageMultiplier = params.aoeDamageMultiplier / 2
+        if table.contains(talent1MarkedEntities, ent) then
+          damageMultiplier = damageMultiplier + params.talentDamageMultiplier
+        end
+        return damageMultiplier
+      end) -- 两段伤害所以减半, 已标记目标将额外伤害并入本次结算
       -- 额外触发三技能效果
       local skill3 = inst.components.ark_skill and inst.components.ark_skill:GetSkill("chongyue_skill3")
-
       if skill3 then
         if skill3:IsAutoActivated() then
           skill3:TryActivate()
@@ -159,26 +158,12 @@ local chongyue_skill2 = State({
           end
         end
       end
-      -- 查找天赋, 额外造成天赋伤害
-      local talent1 = inst.components.ark_talent and inst.components.ark_talent:GetTalent("chongyue_talent1")
-      if talent1 and talent1:IsActivating() then
-        local weapon = inst.components.combat:GetWeapon()
-        for i, ent in ipairs(talent1MarkedEntities) do
-          if inst.replica.combat:IsValidTarget(ent) then
-            local dmg, spdmg = inst.components.combat:CalcDamage(ent, weapon, inst.components.combat
-              .areahitdamagepercent)
-            dmg = dmg * params.talentDamageMultiplier
-            inst:PushEvent("onareaattackother", { target = ent, weapon = weapon, stimuli = nil })
-            ent.components.combat:GetAttacked(inst, dmg, weapon, nil, spdmg)
-          end
-        end
-      end
-      if skill1 and skill1:IsActivating() then
-        skill1:CutBullet()
-      end
-      if skill3 and skill3:IsActivating() then
-        skill3:CutBullet()
-      end
+      -- if skill1 and skill1:IsActivating() then
+      --   skill1:CutBullet()
+      -- end
+      -- if skill3 and skill3:IsActivating() then
+      --   skill3:CutBullet()
+      -- end
     end),
   },
 

@@ -100,7 +100,7 @@ local function OnTalent2Install(talent)
 end
 
 RegisterArkTalent({
-  id        = "an_end_to_war",
+  id        = "chongyue_talent1",
   atlas     = "images/chongyue_skill.xml",
   image     = "skill1.tex",
   name      = STRINGS.UI.ARK_TALENT.NAMES.CHONGYUE[1],
@@ -128,7 +128,7 @@ RegisterArkTalent({
 })
 
 RegisterArkTalent({
-  id        = "all_are_guests",
+  id        = "chongyue_talent2",
   atlas     = "images/chongyue_skill.xml",
   image     = "skill2.tex",
   name      = STRINGS.UI.ARK_TALENT.NAMES.CHONGYUE[2],
