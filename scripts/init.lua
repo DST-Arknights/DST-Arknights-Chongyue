@@ -3,7 +3,6 @@ function mi(str)
 end
 --再分
 
-mi("prefabfiles")  --注册   prefab replica
 mi("assets")      --加载资源
 mi("api")           --可以全局调用的方法放到这里标注好
 mi("tuning")      --可调整数值

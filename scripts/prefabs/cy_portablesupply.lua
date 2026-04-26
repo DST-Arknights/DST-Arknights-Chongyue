@@ -270,34 +270,34 @@ end
 local function placer_postinit_fn(inst)
     --Show the flingo placer on top of the flingo range ground placer
 
-    local placer2 = CreateEntity()
+    -- local placer2 = CreateEntity()
 
-    --[[Non-networked entity]]
-    placer2.entity:SetCanSleep(false)
-    placer2.persists = false
+    -- --[[Non-networked entity]]
+    -- placer2.entity:SetCanSleep(false)
+    -- placer2.persists = false
 
-    placer2.entity:AddTransform()
-    placer2.entity:AddAnimState()
+    -- placer2.entity:AddTransform()
+    -- placer2.entity:AddAnimState()
 
-    placer2:AddTag("CLASSIFIED")
-    placer2:AddTag("NOCLICK")
-    placer2:AddTag("placer")
+    -- placer2:AddTag("CLASSIFIED")
+    -- placer2:AddTag("NOCLICK")
+    -- placer2:AddTag("placer")
 
-    placer2.Transform:SetScale(1.5, 1.5, 1.5)
+    -- placer2.Transform:SetScale(1.5, 1.5, 1.5)
 
-    placer2.AnimState:SetBank("portable_supply")
-    placer2.AnimState:SetBuild("portable_supply")
-    placer2.AnimState:PlayAnimation("place")
-    placer2.AnimState:SetLightOverride(1)
+    -- placer2.AnimState:SetBank("portable_supply")
+    -- placer2.AnimState:SetBuild("portable_supply")
+    -- placer2.AnimState:PlayAnimation("place")
+    -- placer2.AnimState:SetLightOverride(1)
 
-    if not TheNet:IsDedicated() then
-        inst:AddComponent("deployhelper")
-        inst.components.deployhelper.onenablehelper = OnEnableHelper
-    end
+    -- if not TheNet:IsDedicated() then
+    --     inst:AddComponent("deployhelper")
+    --     inst.components.deployhelper.onenablehelper = OnEnableHelper
+    -- end
 
-    placer2.entity:SetParent(inst.entity)
+    -- placer2.entity:SetParent(inst.entity)
 
-    inst.components.placer:LinkEntity(placer2)
+    -- inst.components.placer:LinkEntity(placer2)
 end
 
 return Prefab("cy_portablesupply", fn, assets),

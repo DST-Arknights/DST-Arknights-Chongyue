@@ -1,132 +1,159 @@
-
 local MakePlayerCharacter = require "prefabs/player_common"
-
+local voice = require "chongyue_voice"
 
 local assets = {
-
-        Asset( "ANIM", "anim/player_basic.zip" ),
-        Asset( "ANIM", "anim/player_idles_shiver.zip" ),
-        Asset( "ANIM", "anim/player_actions.zip" ),
-        Asset( "ANIM", "anim/player_actions_axe.zip" ),
-        Asset( "ANIM", "anim/player_actions_pickaxe.zip" ),
-        Asset( "ANIM", "anim/player_actions_shovel.zip" ),
-        Asset( "ANIM", "anim/player_actions_blowdart.zip" ),
-        Asset( "ANIM", "anim/player_actions_eat.zip" ),
-        Asset( "ANIM", "anim/player_actions_item.zip" ),
-        Asset( "ANIM", "anim/player_actions_uniqueitem.zip" ),
-        Asset( "ANIM", "anim/player_actions_bugnet.zip" ),
-        Asset( "ANIM", "anim/player_actions_fishing.zip" ),
-        Asset( "ANIM", "anim/player_actions_boomerang.zip" ),
-        Asset( "ANIM", "anim/player_bush_hat.zip" ),
-        Asset( "ANIM", "anim/player_attacks.zip" ),
-        Asset( "ANIM", "anim/player_idles.zip" ),
-        Asset( "ANIM", "anim/player_rebirth.zip" ),
-        Asset( "ANIM", "anim/player_jump.zip" ),
-        Asset( "ANIM", "anim/player_amulet_resurrect.zip" ),
-        Asset( "ANIM", "anim/player_teleport.zip" ),
-        Asset( "ANIM", "anim/wilson_fx.zip" ),
-        Asset( "ANIM", "anim/player_one_man_band.zip" ),
-        Asset( "ANIM", "anim/shadow_hands.zip" ),
-        Asset( "SOUND", "sound/sfx.fsb" ),
-        Asset( "SOUND", "sound/wilson.fsb" ),
-        Asset( "ANIM", "anim/beard.zip" ),
-
-        Asset( "ANIM", "anim/chongyue.zip" ),
-
-        Asset( "ANIM", "anim/ghost_chongyue_build.zip" ),
-	Asset( "ANIM", "anim/ghost_chongyue.zip" ),	
+  Asset("ANIM", "anim/chongyue.zip"),
+  Asset("ANIM", "anim/player_chongyue.zip"),
+  Asset("ANIM", "anim/ghost_chongyue_build.zip"),
+  Asset("ANIM", "anim/ghost_chongyue.zip"),
+  Asset("ATLAS", "images/map_icons/chongyue.xml"),
 }
 
-local function onbecamehuman(inst,data)
-        --复活后获得50点
-        --不行，大部分复活莫得data
-                if inst.components.cy_qzbs ~= nil then
-                        inst.components.cy_qzbs:DoDelta(50)
-                end
-
-        
-        --inst:Show()
+local function onbecamehuman(inst, data)
+  inst.components.chongyue_qzbs:SetCurrent(50)
 end
 
 local function onbecameghost(inst)
-        --死亡后会失去所有百式
-        if inst.components.cy_qzbs ~= nil then
-                inst.components.cy_qzbs:Clear()
-        end
-        --inst:Hide()
+  --死亡后会失去所有百式
+  if inst.components.chongyue_qzbs ~= nil then
+    inst.components.chongyue_qzbs:SetCurrent(0)
+  end
 end
 
 local start_inv = {}
 for k, v in pairs(TUNING.GAMEMODE_STARTING_ITEMS) do
-    start_inv[string.lower(k)] = v.CHONGYUE
+  start_inv[string.lower(k)] = v.CHONGYUE
 end
 local prefabs = FlattenTree(start_inv, true)
-local function onload(inst)     
-        inst:ListenForEvent("ms_respawnedfromghost", onbecamehuman)
-        inst:ListenForEvent("ms_becameghost", onbecameghost)
+local function onload(inst)
+  inst:ListenForEvent("ms_respawnedfromghost", onbecamehuman)
+  inst:ListenForEvent("ms_becameghost", onbecameghost)
 
-        if inst:HasTag("playerghost") then
-                onbecameghost(inst)
-        else
-                onbecamehuman(inst)
-        end
+  if inst:HasTag("playerghost") then
+    onbecameghost(inst)
+  else
+    onbecamehuman(inst)
+  end
 end
-local function onnewspawn(inst)	--玩家初次降临时
-	onload(inst)
-        inst:AddTag("cy_ksl")   --自然是空手状态
 
-        local startlv = TUNING.CHONGYUE.startlv
-        if startlv and startlv > 0 then
-                inst.components.cy_jyh:Jup()
-                if startlv > 1 then
-                        inst.components.cy_jyh:Jup()
-                end
-        end
+local function OnApplyQzbs(inst, current)
+  -- 工具效率
+  local workBonus = (25 + current) / 100
+  inst.components.workmultiplier:AddMultiplier(ACTIONS.CHOP, workBonus, inst)
+  inst.components.workmultiplier:AddMultiplier(ACTIONS.MINE, workBonus, inst)
+  inst.components.workmultiplier:AddMultiplier(ACTIONS.HAMMER, workBonus, inst)
+  -- 防御
+  local defBonus = math.floor((current - 60) / 2) / 100
+  inst.components.health.externalabsorbmodifiers:SetModifier(inst, defBonus, 'chongyue_qzbs')
+  -- 伤害
+  inst.components.combat.defaultdamageaddmodifiers:SetModifier(inst, current, 'chongyue_qzbs')
+end
+
+local function OnHungerDelta(inst, data)
+  if not inst.components.chongyue_qzbs or data == nil then return end
+  if data.newpercent > TUNING.CHONGYUE.NOGOOD_MAX or data.newpercent < TUNING.CHONGYUE.NOGOOD_MIN then
+    inst.components.chongyue_qzbs:SetLossRate(1.5)
+  else
+    inst.components.chongyue_qzbs:SetLossRate(1)
+  end
+end
+
+local function OnApplyElite(inst, elite)
+  local attackSpeedBonus = elite == 2 and 1.5 or 1
+  -- 攻速
+  inst.components.combat.attackspeedmodifiers:SetModifier(inst, attackSpeedBonus,
+    'chongyue_elite_attack_speed')
+  if inst.components.chongyue_qzbs then
+    local max = 60 + (elite - 1) * 20
+    inst.components.chongyue_qzbs:SetMax(max)
+  end
+  local maxHealthModified = TUNING.CHONGYUE_ELITE[elite] and TUNING.CHONGYUE_ELITE[elite].MAX_HEALTH_MODIFIED or 0
+  inst.components.health.maxhealthaddmodifiers:SetModifier(inst, maxHealthModified, 'chongyue_elite_health')
+  local maxSanityModified = TUNING.CHONGYUE_ELITE[elite] and TUNING.CHONGYUE_ELITE[elite].MAX_SANITY_MODIFIED or 0
+  local sanityPercent = inst.components.sanity:GetPercent()
+  inst.components.sanity:SetMax(TUNING.CHONGYUE_SANITY + maxSanityModified)
+  inst.components.sanity:SetPercent(sanityPercent)
+end
+
+local hitOtherSymbol = Symbol("chongyue_hit_other")
+local function OnHitOther(inst, data)
+  if not inst.components.chongyue_qzbs then return end
+  if not data or not data.target then return end
+  if inst[hitOtherSymbol] then return end
+  inst[hitOtherSymbol] = inst:DoTaskInTime(0, function() inst[hitOtherSymbol] = nil end)
+  local current = inst.components.chongyue_qzbs.current
+  local delta = (-(current * current) / 1000) + (current / 10)
+  delta = math.max(delta, 1)
+  inst.components.chongyue_qzbs:DoDelta(delta)
+end
+
+local function OnNewSpawn(inst) --玩家初次降临时
+  onload(inst)
+  inst.components.ark_skill:AddSkill("chongyue_skill1")
+  inst.components.ark_skill:AddSkill("chongyue_skill2")
+  inst.components.ark_skill:AddSkill("chongyue_skill3")
+  inst.components.ark_talent:AddTalent("an_end_to_war")
+  inst.components.ark_talent:AddTalent("all_are_guests")
 end
 ----
-local common_postinit = function(inst) 
-	-- Minimap icon
-	inst.MiniMapEntity:SetIcon( "chongyue.tex" )
-        inst:AddTag("chongyue")
-
-        inst:AddTag("i11_build")        --制作专属物品的tag
-	inst.net_qzbs = net_shortint(inst.GUID,"player.qzbs","i11dirty")--[-32767..32767]
-	inst.net_qzbsmax = net_shortint(inst.GUID,"player.qzbsmax","i11maxdirty")
-
-        inst.net_cys1 = net_shortint(inst.GUID,"player.qzbss1")
-        inst.net_cys2 = net_shortint(inst.GUID,"player.qzbss2")
-        inst.net_cys3 = net_shortint(inst.GUID,"player.qzbss3")
-        inst.net_cysmax1 = net_shortint(inst.GUID,"player.qzbssmax1")
-        inst.net_cysmax2 = net_shortint(inst.GUID,"player.qzbssmax2")
-        inst.net_cysmax3 = net_shortint(inst.GUID,"player.qzbssmax3")
-        --inst.net_wxwb = net_bool(inst.GUID,"player.wxwb","wxwbdirty")
-        inst.net_cyjyh = net_tinybyte(inst.GUID,"player.cyjyh") --[0~7]
-        inst.net_cyjyh:set(0)
-
-        inst.net_cy_ptas = net_float(inst.GUID,"player.cy_ptas")
+local CommonPostInit = function(inst)
+  -- Minimap icon
+  inst.MiniMapEntity:SetIcon("chongyue.tex")
+  inst:AddTag("chongyue_qzbs")
+  inst:AddTag("chongyue")
+  inst:AddTag("chongyue_punch_attack")
 end
 -- server only
-local master_postinit = function(inst)
+local MasterPostInit = function(inst)
+  inst.starting_inventory = start_inv[TheNet:GetServerGameMode()] or start_inv.default
 
-        inst.starting_inventory = start_inv[TheNet:GetServerGameMode()] or start_inv.default
-            
-        inst.soundsname = "wilson"
-            
-        inst:AddTag("cy_ksl")
+  inst.soundsname = "wilson"
 
-        inst.components.health:SetMaxHealth(TUNING.CHONGYUE_HEALTH)
-        inst.components.hunger:SetMax(TUNING.CHONGYUE_HUNGER)
-        inst.components.sanity:SetMax(TUNING.CHONGYUE_SANITY)
-    
-        inst.components.hunger.hungerrate = 1 * TUNING.WILSON_HUNGER_RATE
-        inst.components.locomotor:SetExternalSpeedMultiplier(inst, "chongyue_speed", TUNING.CHONGYUE.SPEED)
+  inst:AddTag("cy_ksl")
 
-        inst:AddComponent("cy_qzbs")
-        inst.components.cy_qzbs.rate = TUNING.WILSON_HUNGER_RATE / 2    --饥饿速度的一半
-        inst:AddComponent("cy_jyh")
-            
-        inst.OnLoad = onload
-        inst.OnNewSpawn = onnewspawn
-            
-    end
-return MakePlayerCharacter("chongyue", prefabs, assets, common_postinit, master_postinit, prefabs)
+  inst.components.health:SetMaxHealth(TUNING.CHONGYUE_HEALTH)
+  inst.components.hunger:SetMax(TUNING.CHONGYUE_HUNGER)
+  inst.components.sanity:SetMax(TUNING.CHONGYUE_SANITY)
+
+  inst.components.talker.colour = { x = 197 / 255, y = 153 / 255, z = 81 / 255 }
+
+  inst.components.hunger.hungerrate = 1 * TUNING.WILSON_HUNGER_RATE
+  inst.components.locomotor:SetExternalSpeedMultiplier(inst, "chongyue_speed", TUNING.CHONGYUE.SPEED)
+
+  inst:AddComponent("ark_elite")
+  inst.components.ark_elite:SetRarity(6)
+  inst.components.ark_elite:SetOnApplyElite(OnApplyElite)
+  inst:AddComponent("ark_skill")
+  inst.components.ark_skill:DeclareBuiltin("chongyue_skill1", {
+    requiredElite = 1,
+    eliteLevelMap = { [1] = 1, [2] = 2, [3] = 3 }
+  })
+  inst.components.ark_skill:DeclareBuiltin("chongyue_skill2", {
+    requiredElite = 2,
+    eliteLevelMap = { [2] = 1, [3] = 2 }
+  })
+  inst.components.ark_skill:DeclareBuiltin("chongyue_skill3", {
+    requiredElite = 3,
+    eliteLevelMap = { [3] = 1 }
+  })
+  inst:AddComponent("ark_talent")
+  inst.components.ark_talent:DeclareBuiltin("an_end_to_war", {
+    requiredElite = 2,
+    eliteLevelMap = { [2] = 1, [3] = 2 },
+  })
+  inst.components.ark_talent:DeclareBuiltin("all_are_guests", {
+    requiredElite = 3,
+    eliteLevelMap = { [3] = 1 },
+  })
+  inst:AddComponent("i18n_talker")
+  inst.components.i18n_talker:RegisterVoice(voice)
+  inst.components.i18n_talker:SetVoiceLang(TUNING.CHONGYUE.VOICE_LANG)
+  inst:AddComponent("chongyue_qzbs")
+  inst.components.chongyue_qzbs:SetOnCurrent(OnApplyQzbs)
+  inst:ListenForEvent("hungerdelta", OnHungerDelta)
+  inst:ListenForEvent("onhitother", OnHitOther)
+
+  inst.OnLoad = onload
+  inst.OnNewSpawn = OnNewSpawn
+end
+return MakePlayerCharacter("chongyue", prefabs, assets, CommonPostInit, MasterPostInit, prefabs)
