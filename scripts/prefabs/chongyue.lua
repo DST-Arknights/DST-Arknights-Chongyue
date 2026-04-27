@@ -87,6 +87,20 @@ local function OnHitOther(inst, data)
   inst.components.chongyue_qzbs:DoDelta(delta)
 end
 
+local function GetQzbsRechargeAmount(inst, charger, data)
+  if not inst.components.chongyue_qzbs then
+    return 0
+  end
+  return inst.components.chongyue_qzbs:GetRechargeAmount()
+end
+
+local function RechargeQzbs(inst, charger, amount, data)
+  if not inst.components.chongyue_qzbs then
+    return 0
+  end
+  return inst.components.chongyue_qzbs:Recharge(amount)
+end
+
 local function OnNewSpawn(inst) --玩家初次降临时
   onload(inst)
   inst.components.ark_skill:AddSkill("chongyue_skill1")
@@ -102,6 +116,7 @@ local CommonPostInit = function(inst)
   inst:AddTag("chongyue_qzbs")
   inst:AddTag("chongyue")
   inst:AddTag("chongyue_punch_attack")
+  inst:AddTag("ark_character")
 end
 -- server only
 local MasterPostInit = function(inst)
@@ -150,6 +165,13 @@ local MasterPostInit = function(inst)
   inst.components.i18n_talker:SetVoiceLang(TUNING.CHONGYUE.VOICE_LANG)
   inst:AddComponent("chongyue_qzbs")
   inst.components.chongyue_qzbs:SetOnCurrent(OnApplyQzbs)
+
+  inst:AddComponent("ark_supply_rechargeable")
+  inst.components.ark_supply_rechargeable:AddRechargeGroup("chongyue_qzbs", {
+    getrechargeamountfn = GetQzbsRechargeAmount,
+    rechargefn = RechargeQzbs,
+  })
+
   inst:ListenForEvent("hungerdelta", OnHungerDelta)
   inst:ListenForEvent("onhitother", OnHitOther)
 

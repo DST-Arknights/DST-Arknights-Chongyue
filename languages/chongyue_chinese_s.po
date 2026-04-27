@@ -61,36 +61,6 @@ msgctxt "STRINGS.CHARACTERS.GENERIC.DESCRIBE.CHONGYUE.GHOST"
 msgid "Brother Long is still Brother Long!"
 msgstr "龙哥就是龙！"
 
-#. STRINGS.NAMES.CY_PORTABLESUPPLY
-msgctxt "STRINGS.NAMES.CY_PORTABLESUPPLY"
-msgid "Portable Supply Station"
-msgstr "便携补给站"
-
-#. STRINGS.RECIPE_DESC.CY_PORTABLESUPPLY
-msgctxt "STRINGS.RECIPE_DESC.CY_PORTABLESUPPLY"
-msgid "A supply station that can be carried with you"
-msgstr "一个可以随身携带的补给站"
-
-#. STRINGS.CHARACTERS.GENERIC.DESCRIBE.CY_PORTABLESUPPLY
-msgctxt "STRINGS.CHARACTERS.GENERIC.DESCRIBE.CY_PORTABLESUPPLY"
-msgid "A supply station that can be carried with you"
-msgstr "一个可以随身携带的补给站"
-
-#. STRINGS.NAMES.CY_PORTABLESUPPLY_ITEM
-msgctxt "STRINGS.NAMES.CY_PORTABLESUPPLY_ITEM"
-msgid "Portable Supply Station"
-msgstr "便携补给站"
-
-#. STRINGS.RECIPE_DESC.CY_PORTABLESUPPLY_ITEM
-msgctxt "STRINGS.RECIPE_DESC.CY_PORTABLESUPPLY_ITEM"
-msgid "A supply station that can be carried with you"
-msgstr "一个可以随身携带的补给站"
-
-#. STRINGS.CHARACTERS.GENERIC.DESCRIBE.CY_PORTABLESUPPLY_ITEM
-msgctxt "STRINGS.CHARACTERS.GENERIC.DESCRIBE.CY_PORTABLESUPPLY_ITEM"
-msgid "A supply station that can be carried with you"
-msgstr "一个可以随身携带的补给站"
-
 #. STRINGS.UI.ARK_SKILL.NAMES.CHONGYUE.1
 msgctxt "STRINGS.UI.ARK_SKILL.NAMES.CHONGYUE.1"
 msgid "Abundant"
