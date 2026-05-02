@@ -8,7 +8,8 @@ local function OnTalent1Install(talent)
     if not target._end_to_war_fx then
       local fx = SpawnPrefab("chongyue_talent1_fx")
       fx.entity:SetParent(target.entity)
-      target._end_to_war_fx = fx
+      local fxSymbol = AddAliveFx(target, fx)
+      target._end_to_war_fx = fxSymbol
     end
     if target._end_to_war_remove_task then
       target._end_to_war_remove_task:Cancel()
@@ -16,7 +17,7 @@ local function OnTalent1Install(talent)
     target._end_to_war_remove_task = target:DoTaskInTime(params.markDuration, function()
       target:RemoveTag("an_end_to_war_marked")
       if target._end_to_war_fx then
-        target._end_to_war_fx:Remove()
+        RemoveAliveFx(target, target._end_to_war_fx)
         target._end_to_war_fx = nil
       end
       target._end_to_war_remove_task = nil

@@ -108,13 +108,15 @@ end
 
 function ChongyueQzbs:GetRechargeAmount()
   self:PauseLoss()
-  return math.max(self.max - self.current, 0) / 3
+  -- 最大2点.
+  return math.min(self.max - self.current, 2)
 end
 
 function ChongyueQzbs:Recharge(amount)
   self:PauseLoss()
-  local energyDelta = self:DoDelta((amount or 0) * 3, { skip_pause = true })
-  return energyDelta / 3
+  local amount = math.min(amount, self.max - self.current, 2)
+  local energyDelta = self:DoDelta(amount, { skip_pause = true })
+  return amount
 end
 
 function ChongyueQzbs:OnSave()
