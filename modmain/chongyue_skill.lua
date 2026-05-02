@@ -117,7 +117,7 @@ local AOE_CANT_TAGS = { "INLIMBO", "wall", "companion", "DECOR", "invisible", "n
   "player" }
 local function SetupSkill3Interface(skill)
   local inst = skill.inst
-  skill.lightStack = 0
+  skill:SetState("lightStack", 0)
   function skill:ShouldAutoActivated()
     return skill:GetActivateCount() >= SKILL3_LIGHT_MAX_STACKS
   end
@@ -145,7 +145,7 @@ local function SetupSkill3Interface(skill)
   end
 
   function skill:AddLightStack()
-    self.lightStack = math.min(self.lightStack + 1, SKILL3_LIGHT_MAX_STACKS)
+    skill:SetState("lightStack", math.min(skill:GetState("lightStack") + 1, SKILL3_LIGHT_MAX_STACKS))
     self:KeepLightStackMoment()
     self:UpdateLightStack()
   end
@@ -156,19 +156,20 @@ local function SetupSkill3Interface(skill)
   end
 
   function skill:UpdateLightStack()
-    if self.lightStack == 0 then
+    local lightStack = skill:GetState("lightStack")
+    if lightStack == 0 then
       skill.lightFx.Light:Enable(false)
     else
-      local intensity = math.min(0.1 + 0.05 * (self.lightStack - 1), 0.99)
-      local radius = 2 + self.lightStack - 1
-      ArkLogger:Debug("chongyue", "Updating skill3 light stack", self.lightStack, "intensity", intensity, "radius",
+      local intensity = math.min(0.1 + 0.05 * (lightStack - 1), 0.99)
+      local radius = 2 + lightStack - 1
+      ArkLogger:Debug("chongyue", "Updating skill3 light stack", lightStack, "intensity", intensity, "radius",
         radius)
       skill.lightFx.Light:SetRadius(radius)
       skill.lightFx.Light:SetIntensity(intensity)
       skill.lightFx.Light:Enable(true)
     end
     for i = 1, SKILL3_LIGHT_MAX_STACKS do
-      if self.lightStack >= i then
+      if lightStack >= i then
         if not self.stackFxs[i] then
           local fx = SpawnPrefab("chongyue_skill3_stacks_fx_" .. i)
           local x, y, z = skill.inst.Transform:GetWorldPosition()
@@ -255,7 +256,7 @@ local function OnSkill3Install(skill)
   skill.lightPeriodicTask = inst:DoPeriodicTask(1, function()
     local params = skill:GetLevelParams()
     if GetTime() - skill.markedTimeForLight > params.outOfCombatKeepLightStackMomentDuration then
-      skill.lightStack = math.max(0, skill.lightStack - 1)
+      skill:SetState("lightStack", math.max(0, skill:GetState("lightStack") - 1))
       skill:UpdateLightStack()
       skill:KeepLightStackMoment()
     end
@@ -305,14 +306,7 @@ local function OnSkill3Deactivate(skill)
   skill:TryUnlockAutoActivate()
 end
 
-local function OnSkill3Save(skill, data)
-  data.lightStack = skill.lightStack
-end
-
 local function OnSkill3Load(skill, data)
-  if data and data.lightStack then
-    skill.lightStack = data.lightStack
-  end
   skill:UpdateLightStack()
   skill:TryUnlockAutoActivate()
 end
@@ -399,7 +393,6 @@ local skillConfig = { {
   OnRemove = OnSkill3Remove,
   OnActivate = OnSkill3Activate,
   OnDeactivate = OnSkill3Deactivate,
-  OnSave = OnSkill3Save,
   OnLoad = OnSkill3Load,
   levels = { {
     desc = STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE[3][1],
@@ -443,6 +436,7 @@ AddPrefabPostInit("player_classified", function(inst)
         inst._chongyue_skill3_attack_range_fx = SpawnPrefab("reticuleaoecatapultwakeup")
         inst._chongyue_skill3_attack_range_fx.Transform:SetNoFaced()
         inst._chongyue_skill3_attack_range_fx.entity:SetParent(inst._parent.entity)
+        inst._chongyue_skill3_attack_range_fx.AnimState:SetOrientation(ANIM_ORIENTATION.OnGround)
       end
       -- 基准大小16
       inst._chongyue_skill3_attack_range_fx.AnimState:SetScale(value / 10, value / 10)
