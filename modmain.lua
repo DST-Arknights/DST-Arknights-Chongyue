@@ -57,6 +57,6 @@ DefineNetState("chongyue_qzbs", {
   current = "float:classified",
 })
 
-local voice = require("/chongyue_voice")
+local voice = require("chongyue_voice")
 RegisterVoice("chongyue", voice)
 
