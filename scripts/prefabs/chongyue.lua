@@ -8,6 +8,16 @@ local assets = {
   Asset("ATLAS", "images/map_icons/chongyue.xml"),
 }
 
+local CURRENT_MIGRATION_VERSION = 1
+
+local function InstallDefaultSKills(inst)
+  inst.components.ark_skill:AddSkill("chongyue_skill1")
+  inst.components.ark_skill:AddSkill("chongyue_skill2")
+  inst.components.ark_skill:AddSkill("chongyue_skill3")
+  inst.components.ark_talent:AddTalent("chongyue_talent1")
+  inst.components.ark_talent:AddTalent("chongyue_talent2")
+end
+
 local function onbecamehuman(inst, data)
   inst.components.chongyue_qzbs:SetCurrent(50)
 end
@@ -24,7 +34,7 @@ for k, v in pairs(TUNING.GAMEMODE_STARTING_ITEMS) do
   start_inv[string.lower(k)] = v.CHONGYUE
 end
 local prefabs = FlattenTree(start_inv, true)
-local function onload(inst)
+local function OnLoad(inst, data)
   inst:ListenForEvent("ms_respawnedfromghost", onbecamehuman)
   inst:ListenForEvent("ms_becameghost", onbecameghost)
 
@@ -32,6 +42,10 @@ local function onload(inst)
     onbecameghost(inst)
   else
     onbecamehuman(inst)
+  end
+  -- 小于等1版本的安装技能
+  if data == nil or data.current_migration_version == nil or data.current_migration_version < 1 then
+    InstallDefaultSKills(inst)
   end
 end
 
@@ -100,13 +114,13 @@ local function RechargeQzbs(inst, charger, amount, data)
   return inst.components.chongyue_qzbs:Recharge(amount)
 end
 
+local function OnSave(inst, data)
+  data.current_migration_version = CURRENT_MIGRATION_VERSION
+end
+
 local function OnNewSpawn(inst) --玩家初次降临时
-  onload(inst)
-  inst.components.ark_skill:AddSkill("chongyue_skill1")
-  inst.components.ark_skill:AddSkill("chongyue_skill2")
-  inst.components.ark_skill:AddSkill("chongyue_skill3")
-  inst.components.ark_talent:AddTalent("chongyue_talent1")
-  inst.components.ark_talent:AddTalent("chongyue_talent2")
+  OnLoad(inst)
+  InstallDefaultSKills(inst)
 end
 ----
 local CommonPostInit = function(inst)
@@ -174,7 +188,8 @@ local MasterPostInit = function(inst)
   inst:ListenForEvent("hungerdelta", OnHungerDelta)
   inst:ListenForEvent("onhitother", OnHitOther)
 
-  inst.OnLoad = onload
+  inst.OnSave = OnSave
+  inst.OnLoad = OnLoad
   inst.OnNewSpawn = OnNewSpawn
 end
 return MakePlayerCharacter("chongyue", prefabs, assets, CommonPostInit, MasterPostInit, prefabs)
