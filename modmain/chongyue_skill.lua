@@ -74,10 +74,18 @@ local function OnSkill1Install(skill)
       if IsUnarmed(inst) then
         multiplier = multiplier or 1
         local damageMultiplier = skill:GetLevelParams().damageMultiplier
-        multiplier = multiplier * damageMultiplier * skill._currentActiveCostStacks
+        multiplier = multiplier * damageMultiplier
       end
-      local damage, spdamage =  next(self, target, weapon, multiplier)
+      local damage, spdamage = next(self, target, weapon, multiplier)
       return damage, spdamage
+    end)
+  skill:HookFunctionWhileActivating(inst.components.combat, "DoAttack",
+    function(next, self, target, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos)
+      instancemult = instancemult or 1
+      if IsUnarmed(inst) and skill._currentActiveCostStacks > 1 then
+        instancemult = instancemult * skill._currentActiveCostStacks
+      end
+      next(self, target, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos)
     end)
 end
 
@@ -130,17 +138,56 @@ local function SetupSkill3Interface(skill)
     skill._auto_activated = autoActivated
   end
 
-  function skill:TryUnlockAutoActivate()
-    if not skill:IsAutoActivated() and self:ShouldAutoActivated() then
-      local params = skill:GetLevelParams()
-      skill:SetAutoActivated(true)
-      skill:PatchConfig({ activationMode = ARK_CONSTANTS.ACTIVATION_MODE.AUTO })
-      if skill.inst.player_classified then
-        skill.inst.player_classified._chongyue_skill3_attack_range:set(params.normalAttackRange)
-      end
+  function skill:SetSkill3AttackRangeVisible(value)
+    if skill.inst.player_classified and skill.inst.player_classified._chongyue_skill3_attack_range then
+      skill.inst.player_classified._chongyue_skill3_attack_range:set(value)
+    end
+  end
+
+  function skill:EnableAutoAttackRange()
+    if skill._auto_attack_range_applied then
+      return
+    end
+    local params = skill:GetLevelParams()
+    if inst.components.combat then
       skill._old_attack_range = inst.components.combat.attackrange
       skill._old_attack_hit_range = inst.components.combat.hitrange
+      ArkLogger:Debug("chongyue", "Enabling auto attack range, old range", skill._old_attack_range, "old hit range",
+        skill._old_attack_hit_range, "new range", params.normalAttackRange)
       inst.components.combat:SetRange(params.normalAttackRange, params.normalAttackRange + 1)
+    end
+    self:SetSkill3AttackRangeVisible(params.normalAttackRange)
+    skill._auto_attack_range_applied = true
+  end
+
+  function skill:DisableAutoAttackRange()
+    if skill._auto_attack_range_applied then
+      ArkLogger:Debug("chongyue", "Disabling auto attack range, restoring old range", skill._old_attack_range,
+        skill._old_attack_hit_range)
+      if inst.components.combat and skill._old_attack_range and skill._old_attack_hit_range then
+        inst.components.combat:SetRange(skill._old_attack_range, skill._old_attack_hit_range)
+      end
+    end
+    self:SetSkill3AttackRangeVisible(0)
+    skill._auto_attack_range_applied = false
+    skill._old_attack_range = nil
+    skill._old_attack_hit_range = nil
+  end
+
+  function skill:RefreshAutoAttackRangeByWeaponState()
+    if skill:IsAutoActivated() and IsUnarmed(inst) then
+      self:EnableAutoAttackRange()
+    else
+      -- 无论是否持武器, 只要不是空手激活状态就恢复原始攻击距离
+      self:DisableAutoAttackRange()
+    end
+  end
+
+  function skill:TryUnlockAutoActivate()
+    if not skill:IsAutoActivated() and self:ShouldAutoActivated() then
+      skill:SetAutoActivated(true)
+      skill:PatchConfig({ activationMode = ARK_CONSTANTS.ACTIVATION_MODE.AUTO })
+      self:RefreshAutoAttackRangeByWeaponState()
     end
   end
 
@@ -227,6 +274,12 @@ local function OnSkill3Install(skill)
   SetupSkill3Interface(skill)
   skill:ListenForEvent("onhitother", GenSkillHitRecoveryEnergyListener(skill))
   skill:ListenForEventWhileActivating("onhitother", OnSkill3HitOther)
+  skill:ListenForEvent("equip", function()
+    skill:RefreshAutoAttackRangeByWeaponState()
+  end)
+  skill:ListenForEvent("unequip", function()
+    skill:RefreshAutoAttackRangeByWeaponState()
+  end)
   skill:HookFunction(inst.components.combat, "DoAttack",
     function(next, self, target, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos)
       if not target then
@@ -246,9 +299,8 @@ local function OnSkill3Install(skill)
       if skill:IsActivating() and IsUnarmed(inst) then
         skill:DoSkillAreaAttack(target:GetPosition())
         skill:CutBullet()
-      else
-        next(self, target, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos)
       end
+      next(self, target, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos)
     end)
   -- 自动激活后持续时间内未攻击则减少层数
   skill:KeepLightStackMoment()
@@ -285,13 +337,7 @@ local function OnSkill3Remove(skill)
   end
   -- 攻击距离恢复
   if skill._auto_activated then
-    local inst = skill.inst
-    if inst.components.combat and skill._old_attack_range and skill._old_attack_hit_range then
-      inst.components.combat:SetRange(skill._old_attack_range, skill._old_attack_hit_range)
-    end
-    if inst.player_classified and inst.player_classified._chongyue_skill3_attack_range then
-      inst.player_classified._chongyue_skill3_attack_range:set(0)
-    end
+    skill:DisableAutoAttackRange()
   end
 end
 
@@ -310,6 +356,7 @@ end
 local function OnSkill3Load(skill, data)
   skill:UpdateLightStack()
   skill:TryUnlockAutoActivate()
+  skill:RefreshAutoAttackRangeByWeaponState()
 end
 
 local skillConfig = { {
