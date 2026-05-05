@@ -1,5 +1,4 @@
 local MakePlayerCharacter = require "prefabs/player_common"
-local voice = require "chongyue_voice"
 
 local assets = {
   Asset("ANIM", "anim/chongyue.zip"),
@@ -161,7 +160,7 @@ local MasterPostInit = function(inst)
     eliteLevelMap = { [3] = 1 },
   })
   inst:AddComponent("i18n_talker")
-  inst.components.i18n_talker:RegisterVoice(voice)
+  inst.components.i18n_talker:SetupVoice("chongyue")
   inst.components.i18n_talker:SetVoiceLang(TUNING.CHONGYUE.VOICE_LANG)
   inst:AddComponent("chongyue_qzbs")
   inst.components.chongyue_qzbs:SetOnCurrent(OnApplyQzbs)

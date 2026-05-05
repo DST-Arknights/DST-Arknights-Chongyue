@@ -56,3 +56,7 @@ DefineNetState("chongyue_qzbs", {
   max = "float:classified",
   current = "float:classified",
 })
+
+local voice = require("/chongyue_voice")
+RegisterVoice("chongyue", voice)
+

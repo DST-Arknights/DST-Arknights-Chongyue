@@ -206,6 +206,7 @@ local Skill3CutBulletTaskSymbol = Symbol("chongyue_skill3_cut_bullet_task")
 local function OnSkill3HitOther(inst, data)
   local target = data and data.target or nil
   if not target then return end
+  if not IsUnarmed(inst) then return end
   local skill = inst.components.ark_skill:GetSkill("chongyue_skill3")
   if not skill then return end
   if inst[Skill3CutBulletTaskSymbol] then return end
@@ -317,6 +318,7 @@ local skillConfig = { {
   lockedDesc = STRINGS.UI.ARK_SKILL.LOCKED_DESC.CHONGYUE[1],
   atlas = "images/chongyue_skill.xml",
   image = "skill1.tex",
+  recipe_image = "skill1_recipe.tex",
   hotkey = KEY_Z,
   energyRecoveryMode = ARK_CONSTANTS.ENERGY_RECOVERY_MODE.ATTACK,
   activationMode = ARK_CONSTANTS.ACTIVATION_MODE.MANUAL,
@@ -353,6 +355,7 @@ local skillConfig = { {
   lockedDesc = STRINGS.UI.ARK_SKILL.LOCKED_DESC.CHONGYUE[2],
   atlas = "images/chongyue_skill.xml",
   image = "skill2.tex",
+  recipe_image = "skill2_recipe.tex",
   hotkey = KEY_X,
   energyRecoveryMode = ARK_CONSTANTS.ENERGY_RECOVERY_MODE.ATTACK,
   activationMode = ARK_CONSTANTS.ACTIVATION_MODE.MANUAL,
@@ -386,6 +389,7 @@ local skillConfig = { {
   lockedDesc = STRINGS.UI.ARK_SKILL.LOCKED_DESC.CHONGYUE[3],
   atlas = "images/chongyue_skill.xml",
   image = "skill3.tex",
+  recipe_image = "skill3_recipe.tex",
   hotkey = KEY_C,
   energyRecoveryMode = ARK_CONSTANTS.ENERGY_RECOVERY_MODE.ATTACK,
   activationMode = ARK_CONSTANTS.ACTIVATION_MODE.MANUAL,
