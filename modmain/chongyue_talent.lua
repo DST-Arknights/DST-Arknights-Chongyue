@@ -86,8 +86,10 @@ local function OnTalent2Install(talent)
     local key = "chongyue_elite_attack_speed"
     if IsUnarmed(inst) then
       local params = talent:GetLevelParams()
+      ArkLogger:Debug("RefreshTalent2AttackSpeedMultiplier, unarmed attack speed multiplier: ", params.unarmedAttackSpeedMultiplier)
       inst.components.combat.attackspeedmodifiers:SetModifier(inst, params.unarmedAttackSpeedMultiplier, key)
     else
+      ArkLogger:Debug("RefreshTalent2AttackSpeedMultiplier, not unarmed, remove attack speed modifier")
       inst.components.combat.attackspeedmodifiers:SetModifier(inst, 1, key)
     end
   end
@@ -97,6 +99,14 @@ local function OnTalent2Install(talent)
   talent:ListenForEventWhileActivating("unequip", function()
     talent:RefreshTalent2AttackSpeedMultiplier()
   end)
+end
+
+local function OnTalent2Activate(talent)
+  ArkLogger:Debug("OnTalent2Activate")
+  talent:RefreshTalent2AttackSpeedMultiplier()
+end
+
+local function OnTalent2Deactivate(talent)
   talent:RefreshTalent2AttackSpeedMultiplier()
 end
 
@@ -145,4 +155,6 @@ RegisterArkTalent({
     },
   },
   OnInstall = OnTalent2Install,
+  OnActivate = OnTalent2Activate,
+  OnDeactivate = OnTalent2Deactivate,
 })

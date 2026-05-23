@@ -150,11 +150,11 @@ local function SetupSkill3Interface(skill)
     end
     local params = skill:GetLevelParams()
     if inst.components.combat then
-      skill._old_attack_range = inst.components.combat.attackrange
-      skill._old_attack_hit_range = inst.components.combat.hitrange
-      ArkLogger:Debug("chongyue", "Enabling auto attack range, old range", skill._old_attack_range, "old hit range",
-        skill._old_attack_hit_range, "new range", params.normalAttackRange)
-      inst.components.combat:SetRange(params.normalAttackRange, params.normalAttackRange + 1)
+      local deltaRange = params.normalAttackRange - inst.components.combat.attackrange
+      local deltaHitRange = (params.normalAttackRange + 1) - inst.components.combat.hitrange
+      ArkLogger:Debug("chongyue", "Enabling auto attack range, delta", deltaRange, "new range", params.normalAttackRange)
+      inst.components.combat.attackrangeaddmodifiers:SetModifier("chongyue_skill3", deltaRange)
+      inst.components.combat.hitrangeaddmodifiers:SetModifier("chongyue_skill3", deltaHitRange)
     end
     self:SetSkill3AttackRangeVisible(params.normalAttackRange)
     skill._auto_attack_range_applied = true
@@ -162,16 +162,14 @@ local function SetupSkill3Interface(skill)
 
   function skill:DisableAutoAttackRange()
     if skill._auto_attack_range_applied then
-      ArkLogger:Debug("chongyue", "Disabling auto attack range, restoring old range", skill._old_attack_range,
-        skill._old_attack_hit_range)
-      if inst.components.combat and skill._old_attack_range and skill._old_attack_hit_range then
-        inst.components.combat:SetRange(skill._old_attack_range, skill._old_attack_hit_range)
+      ArkLogger:Debug("chongyue", "Disabling auto attack range")
+      if inst.components.combat then
+        inst.components.combat.attackrangeaddmodifiers:RemoveModifier("chongyue_skill3")
+        inst.components.combat.hitrangeaddmodifiers:RemoveModifier("chongyue_skill3")
       end
     end
     self:SetSkill3AttackRangeVisible(0)
     skill._auto_attack_range_applied = false
-    skill._old_attack_range = nil
-    skill._old_attack_hit_range = nil
   end
 
   function skill:RefreshAutoAttackRangeByWeaponState()
