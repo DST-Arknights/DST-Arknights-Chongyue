@@ -72,10 +72,6 @@ local function OnHungerDelta(inst, data)
 end
 
 local function OnApplyElite(inst, elite)
-  local attackSpeedBonus = elite == 2 and 1.5 or 1
-  -- 攻速
-  inst.components.combat.attackspeedmodifiers:SetModifier(inst, attackSpeedBonus,
-    'chongyue_elite_attack_speed')
   if inst.components.chongyue_qzbs then
     local max = 60 + (elite - 1) * 20
     inst.components.chongyue_qzbs:SetMax(max)
