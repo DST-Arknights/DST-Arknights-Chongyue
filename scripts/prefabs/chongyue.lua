@@ -51,7 +51,7 @@ end
 
 local function OnApplyQzbs(inst, current)
   -- 工具效率
-  local workBonus = (25 + current) / 100
+  local workBonus = (75 + current) / 100
   inst.components.workmultiplier:AddMultiplier(ACTIONS.CHOP, workBonus, inst)
   inst.components.workmultiplier:AddMultiplier(ACTIONS.MINE, workBonus, inst)
   inst.components.workmultiplier:AddMultiplier(ACTIONS.HAMMER, workBonus, inst)

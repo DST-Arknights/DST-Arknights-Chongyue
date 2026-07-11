@@ -1,5 +1,7 @@
 --一键GLOBAL，其他地方就不用写了
 GLOBAL.setmetatable(env, { __index = function(t, k) return GLOBAL.rawget(GLOBAL, k) end })
+
+assert(ARK_ITEM_PACKAGE_LOADED, "请安装前置模组: ark_item_package\n please install the required mod: ark_item_package\n[https://steamcommunity.com/sharedfiles/filedetails/?id=3677284770]")
 --ww
 PrefabFiles = {
   "chongyue",
@@ -40,7 +42,7 @@ AddReplicableComponent("chongyue_qzbs")
 
 modimport("modmain/chongyue_tuning")
 
-ArkLogger:DeclareLogger('DEBUG', 'chongyue')
+ArkLogger:DeclareLogger('INFO', 'chongyue')
 MergePOFile("languages/chongyue_chinese_s.po", "zh", true)
 
 AddModCharacter("chongyue", "MALE") --人物性别定义
