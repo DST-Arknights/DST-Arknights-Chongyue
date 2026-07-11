@@ -22,7 +22,7 @@ author = ChooseTranslationTable({
     zh = "美工：xiaotianzihan 码师：夜雪 花菜 望月心灵",
     en = "Artist: xiaotianzihan Coder: 夜雪 花菜 望月心灵",
 })
-version = "2.0.2" -- 版本号
+version = "2.0.3" -- 版本号
 
 
 forumthread = ""
