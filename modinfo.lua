@@ -9,16 +9,36 @@
 
 
 
-name = ChooseTranslationTable({
+-- 对不支持的语言兜底到英文（DST 原版 ChooseTranslationTable 只回退到 tbl[1]，
+-- 但我们用字典键值而非数字索引，非 en/zh 语言会返回 nil 导致崩溃）
+local function T(tbl)
+    return ChooseTranslationTable(tbl) or tbl["en"]
+end
+
+name = T({
     zh = "重岳",
     en = "Chongyue",
 })
-description = ChooseTranslationTable({
-    zh = "留舰人员年、夕、令的兄长\n与炎国兵部、司岁台等政府部门往来密切\n此前担任移动城市玉门的武术教官\n已卸任",
-    en =
-    "The elder brother of the year, evening, and order of the ship's personnel\nHe has close contact with government departments such as the Ministry of War and the Sui Tai of the Flame Country\nHe previously served as a martial arts instructor for the mobile city Yumen\nHe has retired",
+-- 版本更新说明（由发布脚本自动维护，请勿手动编辑）
+local UPDATE_EN = [[]]
+
+local UPDATE_ZH = [[]]
+
+description = T({
+    zh = [[留舰人员年、夕、令的兄长
+与炎国兵部、司岁台等政府部门往来密切
+此前担任移动城市玉门的武术教官
+已卸任
+
+]] .. UPDATE_ZH,
+    en = [[The elder brother of the year, evening, and order of the ship's personnel
+He has close contact with government departments such as the Ministry of War and the Sui Tai of the Flame Country
+He previously served as a martial arts instructor for the mobile city Yumen
+He has retired
+
+]] .. UPDATE_EN,
 })
-author = ChooseTranslationTable({
+author = T({
     zh = "美工：xiaotianzihan 码师：夜雪 花菜 望月心灵",
     en = "Artist: xiaotianzihan Coder: 夜雪 花菜 望月心灵",
 })
@@ -50,33 +70,33 @@ local function AddTitle(title)
     }
 end
 configuration_options = {
-    AddTitle(ChooseTranslationTable({
+    AddTitle(T({
         zh = "语音设置",
         en = "Voice Settings",
     })),
     {
         name = "chongyue_skill_sound_type",
-        label = ChooseTranslationTable({
+        label = T({
             zh = "语音类型",
             en = "Voice Type",
         }),
         options = {
             {
-                description = ChooseTranslationTable({
+                description = T({
                     zh = "普通话",
                     en = "Mandarin",
                 }),
                 data = "mandarin"
             },
             {
-                description = ChooseTranslationTable({
+                description = T({
                     zh = "方言",
                     en = "Dialect",
                 }),
                 data = "dialect"
             },
             {
-                description = ChooseTranslationTable({
+                description = T({
                     zh = "日语",
                     en = "Japanese",
                 }),
