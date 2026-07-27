@@ -20,9 +20,17 @@ name = T({
     en = "Chongyue",
 })
 -- 版本更新说明（由发布脚本自动维护，请勿手动编辑）
-local UPDATE_EN = [[]]
+local UPDATE_EN = [[
+v2.0.4 (2026-07-28)
+- Added publish scripts with version bump and dependency check support
+- Optimized language processing and fixed MergePOFile parameter configuration
+]]
 
-local UPDATE_ZH = [[]]
+local UPDATE_ZH = [[
+v2.0.4 (2026-07-28)
+- 新增发布脚本，支持版本升级与依赖检查
+- 优化语言处理，修复 MergePOFile 参数设置
+]]
 
 description = T({
     zh = [[留舰人员年、夕、令的兄长
@@ -42,7 +50,7 @@ author = T({
     zh = "美工：xiaotianzihan 码师：夜雪 花菜 望月心灵",
     en = "Artist: xiaotianzihan Coder: 夜雪 花菜 望月心灵",
 })
-version = "2.0.3" -- 版本号
+version = "2.0.4" -- 版本号
 
 
 forumthread = ""
@@ -109,5 +117,5 @@ configuration_options = {
 }
 mod_dependencies = {
     -- { workshop = "workshop-3677284770"},
-    { ["DST-ArknightsItemPackage"] = false },
+    { workshop = "workshop-3677284770" },
 }

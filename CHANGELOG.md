@@ -1,0 +1,8 @@
+# 版本更新记录
+
+本项目的所有重要变更。
+
+## v2.0.4 (2026-07-28)
+
+- Added publish scripts with version bump and dependency check support | 新增发布脚本，支持版本升级与依赖检查
+- Optimized language processing and fixed MergePOFile parameter configuration | 优化语言处理，修复 MergePOFile 参数设置
