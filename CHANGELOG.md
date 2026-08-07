@@ -1,5 +1,9 @@
 # 版本更新记录
 
+## v2.0.5 (2026-08-07)
+
+- Added English language support, updated UI text language options | 添加英文语言支持，更新界面文本语言选项
+
 本项目的所有重要变更。
 
 ## v2.0.4 (2026-07-28)
