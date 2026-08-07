@@ -78,6 +78,41 @@ local function AddTitle(title)
     }
 end
 configuration_options = {
+    {
+        name = "language",
+        label = T({
+            zh = "界面文本语言",
+            en = "Text Language",
+        }),
+        hover = T({
+            zh = "选择模组界面文本的语言 (Auto 跟随游戏语言)",
+            en = "Choose the mod's UI text language (Auto follows game language)",
+        }),
+        options = {
+            {
+                description = T({
+                    zh = "自动 (跟随游戏)",
+                    en = "Auto (follow game)",
+                }),
+                data = "auto"
+            },
+            {
+                description = T({
+                    zh = "简体中文",
+                    en = "Simplified Chinese",
+                }),
+                data = "zh"
+            },
+            {
+                description = T({
+                    zh = "英文",
+                    en = "English",
+                }),
+                data = "en"
+            },
+        },
+        default = "auto"
+    },
     AddTitle(T({
         zh = "语音设置",
         en = "Voice Settings",
@@ -116,6 +151,5 @@ configuration_options = {
 
 }
 mod_dependencies = {
-    -- { workshop = "workshop-3677284770"},
-    { workshop = "workshop-3677284770" },
+    {["DST-ArknightsItemPackage"] = false},
 }

@@ -1,7 +1,7 @@
 --- 关闭
 local CY_TURNOFF = _G.Action({ priority = -1 })
 CY_TURNOFF.id = "CY_TURNOFF"
-CY_TURNOFF.str = "关闭"
+CY_TURNOFF.str = "Turn Off"
 CY_TURNOFF.fn = function(act)
     local tar = act.target or act.invobject
     if tar and tar.components.cy_machine and tar.components.cy_machine:IsOn() then
@@ -14,7 +14,7 @@ AddAction(CY_TURNOFF)
 --- 关闭
 local CY_TURNON = _G.Action({ priority = -1 })
 CY_TURNON.id = "CY_TURNON"
-CY_TURNON.str = "关闭"
+CY_TURNON.str = "Turn On"
 CY_TURNON.fn = function(act)
     local tar = act.target or act.invobject
     if tar and tar.components.cy_machine and not tar.components.cy_machine:IsOn() then

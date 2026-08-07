@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Language: zh\n"
+"Language: en\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT Version: 2.0"
@@ -8,155 +8,154 @@ msgstr ""
 #. STRINGS.CHARACTER_TITLES.chongyue
 msgctxt "STRINGS.CHARACTER_TITLES.chongyue"
 msgid "Chongyue"
-msgstr "重岳"
+msgstr "Chongyue"
 
 #. STRINGS.CHARACTER_NAMES.chongyue
 msgctxt "STRINGS.CHARACTER_NAMES.chongyue"
 msgid "Shuo"
-msgstr "朔"
+msgstr "Shuo"
 
 #. STRINGS.CHARACTER_DESCRIPTIONS.chongyue
 msgctxt "STRINGS.CHARACTER_DESCRIPTIONS.chongyue"
 msgid "*A thousand moves and a hundred styles at once. Go practice again"
-msgstr "*千招百式在一息\n*再去练练吧"
+msgstr "*A thousand moves and a hundred styles at once.\n*Go practice again."
 
 #. STRINGS.CHARACTER_QUOTES.chongyue
 msgctxt "STRINGS.CHARACTER_QUOTES.chongyue"
 msgid "A thousand moves and a hundred techniques in one breath"
-msgstr "千招百式在一息"
-
+msgstr "A thousand moves and a hundred techniques in one breath"
 
 #. STRINGS.CHARACTER_SURVIVABILITY.chongyue
 msgctxt "STRINGS.CHARACTER_SURVIVABILITY.chongyue"
 msgid "Anatman"
-msgstr "无我"
+msgstr "Anatman"
 
 #. STRINGS.NAMES.CHONGYUE
 msgctxt "STRINGS.NAMES.CHONGYUE"
 msgid "Chongyue"
-msgstr "重岳"
+msgstr "Chongyue"
 
 #. STRINGS.CHARACTERS.GENERIC.DESCRIBE.CHONGYUE.GENERIC
 msgctxt "STRINGS.CHARACTERS.GENERIC.DESCRIBE.CHONGYUE.GENERIC"
 msgid "Grandmaster"
-msgstr "宗师"
+msgstr "Grandmaster"
 
 #. STRINGS.CHARACTERS.GENERIC.DESCRIBE.CHONGYUE.ATTACKER
 msgctxt "STRINGS.CHARACTERS.GENERIC.DESCRIBE.CHONGYUE.ATTACKER"
 msgid "I don't think this is wise."
-msgstr "我觉得这不理智"
+msgstr "I don't think this is wise."
 
 #. STRINGS.CHARACTERS.GENERIC.DESCRIBE.CHONGYUE.MURDERER
 msgctxt "STRINGS.CHARACTERS.GENERIC.DESCRIBE.CHONGYUE.MURDERER"
 msgid "Why!"
-msgstr "为何!"
+msgstr "Why!"
 
 #. STRINGS.CHARACTERS.GENERIC.DESCRIBE.CHONGYUE.REVIVER
 msgctxt "STRINGS.CHARACTERS.GENERIC.DESCRIBE.CHONGYUE.REVIVER"
 msgid "Thank you."
-msgstr "谢谢。"
+msgstr "Thank you."
 
 #. STRINGS.CHARACTERS.GENERIC.DESCRIBE.CHONGYUE.GHOST
 msgctxt "STRINGS.CHARACTERS.GENERIC.DESCRIBE.CHONGYUE.GHOST"
 msgid "Brother Long is still Brother Long!"
-msgstr "龙哥就是龙！"
+msgstr "Brother Long is still Brother Long!"
 
 #. STRINGS.UI.ARK_SKILL.NAMES.CHONGYUE.1
 msgctxt "STRINGS.UI.ARK_SKILL.NAMES.CHONGYUE.1"
 msgid "Abundant"
-msgstr "冲盈"
+msgstr "Abundant"
 
 #.STRINGS.UI.ARK_SKILL.LOCKED_DESC.CHONGYUE.1
 msgctxt "STRINGS.UI.ARK_SKILL.LOCKED_DESC.CHONGYUE.1"
 msgid "Auto unlock"
-msgstr "自动解锁"
+msgstr "Auto unlock"
 
 #STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE.1.1
 msgctxt "STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE.1.1"
 msgid "Deals 210% ATK as Physical damage to the target. When at maximum charges, removes all charges and deals damage for each charge removed\nMax 3 charges"
-msgstr "-下次普通攻击对目标造成攻击力200%的物理伤害\n-技能达到最大充能层数时消耗所有充能，造成对应次数的伤害\n-限制空手触发\n-可充能3次"
+msgstr "Next basic attack deals 200% ATK as Physical damage to the target.\nWhen at max charges, consumes all charges and deals damage for each charge consumed.\nUnarmed only.\nMax 3 charges."
 
 #STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE.1.2
 msgctxt "STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE.1.2"
 msgid "Deals 210% ATK as Physical damage to the target. When at maximum charges, removes all charges and deals damage for each charge removed\nMax 3 charges"
-msgstr "-下次普通攻击对目标造成攻击力300%的物理伤害\n-技能达到最大充能层数时消耗所有充能，造成对应次数的伤害\n-限制空手触发\n-可充能3次"
+msgstr "Next basic attack deals 300% ATK as Physical damage to the target.\nWhen at max charges, consumes all charges and deals damage for each charge consumed.\nUnarmed only.\nMax 3 charges."
 
 #STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE.1.3
 msgctxt "STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE.1.3"
 msgid "Deals 210% ATK as Physical damage to the target. When at maximum charges, removes all charges and deals damage for each charge removed\nMax 3 charges"
-msgstr "-下次普通攻击对目标造成攻击力400%的物理伤害\n-技能达到最大充能层数时消耗所有充能，造成对应次数的伤害\n-限制空手触发\n-可充能3次"
+msgstr "Next basic attack deals 400% ATK as Physical damage to the target.\nWhen at max charges, consumes all charges and deals damage for each charge consumed.\nUnarmed only.\nMax 3 charges."
 
 #. STRINGS.UI.ARK_SKILL.NAMES.CHONGYUE.2
 msgctxt "STRINGS.UI.ARK_SKILL.NAMES.CHONGYUE.2"
 msgid "Whisk"
-msgstr "拂尘"
+msgstr "Whisk"
 
 #.STRINGS.UI.ARK_SKILL.LOCKED_DESC.CHONGYUE.2
 msgctxt "STRINGS.UI.ARK_SKILL.LOCKED_DESC.CHONGYUE.2"
 msgid "Elite level 1 unlock at Prestihatitator"
-msgstr "-精英化一解锁\n-等级满级后到训练站完成精英化"
+msgstr "Elite 1 unlock - Reach max level and complete Elite training at the Training Station"
 
 #STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE.2.1
 msgctxt "STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE.2.1"
 msgid "Deals 250% ATK as Physical damage to up to 4 enemies and causes targets affected by Talent 1 to Levitate, then removes Levitate from all enemies with Levitate, activates Talent 1 on them with 100% chance, and deals 350% ATK as Physical damage Max 2 charges"
-msgstr "-对周围敌人造成相当于攻击力350%的物理伤害\n-使天赋'止戈'生效的目标浮空并额外造成480%攻击力的伤害\n-命中的敌人必定触发天赋'止戈'\n-限制空手释放\n-可充能2次"
+msgstr "Deals 350% ATK as Physical damage to nearby enemies.\nEnemies affected by Talent 'An End to War' are Levitated and take an additional 480% ATK as Physical damage.\nGuaranteed to trigger Talent 'An End to War' on hit.\nUnarmed only.\nMax 2 charges."
 
 #STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE.2.2
 msgctxt "STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE.2.2"
 msgid "Deals 250% ATK as Physical damage to up to 4 enemies and causes targets affected by Talent 1 to Levitate, then removes Levitate from all enemies with Levitate, activates Talent 1 on them with 100% chance, and deals 350% ATK as Physical damage Max 2 charges"
-msgstr "-对周围敌人造成相当于攻击力450%的物理伤害\n-使天赋'止戈'生效的目标浮空并额外造成650%攻击力的伤害\n-命中的敌人必定触发天赋'止戈'\n-限制空手释放\n-可充能2次"
+msgstr "Deals 450% ATK as Physical damage to nearby enemies.\nEnemies affected by Talent 'An End to War' are Levitated and take an additional 650% ATK as Physical damage.\nGuaranteed to trigger Talent 'An End to War' on hit.\nUnarmed only.\nMax 2 charges."
 
 #. STRINGS.UI.ARK_SKILL.NAMES.CHONGYUE.3
 msgctxt "STRINGS.UI.ARK_SKILL.NAMES.CHONGYUE.3"
 msgid "Anatta"
-msgstr "我无"
+msgstr "Anatta"
 
 #.STRINGS.UI.ARK_SKILL.LOCKED_DESC.CHONGYUE.3
 msgctxt "STRINGS.UI.ARK_SKILL.LOCKED_DESC.CHONGYUE.3"
 msgid "Elite level 2 unlock at Shadow Manipulator"
-msgstr "-精英化二解锁\n-等级满级后到训练站完成精英化"
+msgstr "Elite 2 unlock - Reach max level and complete Elite training at the Training Station"
 
 #STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE.3.1
 msgctxt "STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE.3.1"
 msgid "Deals 180% ATK as Physical damage to the target and nearby enemies; after this skill has been used 5 times, Chongyue's attack range increases and attacks hit twice; this skill becomes auto-activated and deals damage an extra time"
-msgstr "-下次普通攻击对目标及其周围造成相当于攻击力180%的物理伤害\n-累计使用五次技能攻击的范围扩大且攻击变为二连击，技能变为自动释放且造成额外一次伤害\n-限制空手触发"
+msgstr "Next basic attack deals 180% ATK as Physical damage to the target and nearby enemies.\nAfter 5 uses, attack range expands and attacks hit twice.\nSkill becomes auto-activated and deals an additional hit.\nUnarmed only."
 
 #STRINGS.UI.ARK_TALENT.NAMES.CHONGYUE.1
 msgctxt "STRINGS.UI.ARK_TALENT.NAMES.CHONGYUE.1"
 msgid "An End to War"
-msgstr "止戈"
+msgstr "An End to War"
 
 #STRINGS.UI.ARK_TALENT.LEVEL_DESC.CHONGYUE.1.1
 msgctxt "STRINGS.UI.ARK_TALENT.LEVEL_DESC.CHONGYUE.1.1"
 msgid "18% chance for normal attacks to increase the damage player deals to the target by 55% for 2.5 seconds"
-msgstr "对目标普通攻击时，有18%的概率使重岳2.5秒内对其造成的伤害提升55%"
+msgstr "Basic attacks have an 18% chance to increase Chongyue's damage dealt to the target by 55% for 2.5 seconds."
 
 #STRINGS.UI.ARK_TALENT.LEVEL_DESC.CHONGYUE.1.2
 msgctxt "STRINGS.UI.ARK_TALENT.LEVEL_DESC.CHONGYUE.1.2"
 msgid "18% chance for normal attacks to increase the damage player deals to the target by 65% for 2.5 seconds"
-msgstr "对目标普通攻击时，有18%的概率使重岳2.5秒内对其造成的伤害提升65%"
+msgstr "Basic attacks have an 18% chance to increase Chongyue's damage dealt to the target by 65% for 2.5 seconds."
 
 #STRINGS.UI.ARK_TALENT.NAMES.CHONGYUE.2
 msgctxt "STRINGS.UI.ARK_TALENT.NAMES.CHONGYUE.2"
 msgid "All Are Guests"
-msgstr "万象为宾"
+msgstr "All Are Guests"
 
 #STRINGS.UI.ARK_TALENT.LEVEL_DESC.CHONGYUE.2.1
 msgctxt "STRINGS.UI.ARK_TALENT.LEVEL_DESC.CHONGYUE.2.1"
 msgid "	Player recovers 3 SP if he defeats at least one enemy with a skill.\nUnarmed attack speed increased by 50%"
-msgstr "若释放释放一次技能击倒不少于一个敌人，则回复3点技力\n空手攻击速度增加50%"
+msgstr "Recovers 3 SP if at least one enemy is defeated with a skill.\nUnarmed attack speed increased by 50%."
 
 #. STRINGS.CHARACTERS.GENERIC.CHONGYUE_SKILL2_ACTIVATE_TEST_UNARMED_ONLY
 msgctxt "STRINGS.CHARACTERS.GENERIC.CHONGYUE_SKILL2_ACTIVATE_TEST_UNARMED_ONLY"
 msgid "Can only be activated when unarmed"
-msgstr "仅在空手时可用"
+msgstr "Can only be activated when unarmed"
 
 #. STRINGS.ACTIONS.CY_TURNOFF.GENERIC
 msgctxt "STRINGS.ACTIONS.CY_TURNOFF.GENERIC"
 msgid "Turn Off"
-msgstr "关闭"
+msgstr "Turn Off"
 
 #. STRINGS.ACTIONS.CY_TURNON.GENERIC
 msgctxt "STRINGS.ACTIONS.CY_TURNON.GENERIC"
 msgid "Turn On"
-msgstr "开启"
+msgstr "Turn On"

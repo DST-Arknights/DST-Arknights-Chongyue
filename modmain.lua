@@ -43,7 +43,14 @@ AddReplicableComponent("chongyue_qzbs")
 modimport("modmain/chongyue_tuning")
 
 ArkLogger:DeclareLogger('INFO', 'chongyue')
-MergePOFile("languages/chongyue_chinese_s.po", "zh")
+if LOC.GetLocaleCode() == "zh" then
+  local new = require("speech_chongyue")
+  STRINGS.CHARACTERS.CHONGYUE = MergeMaps(STRINGS.CHARACTERS.CHONGYUE, new)
+end
+RegisterPOFile(GetModConfigData("language"), {
+    zh = "languages/chongyue_chinese_s.po",
+    en = "languages/chongyue_english.po",
+})
 
 AddModCharacter("chongyue", "MALE") --人物性别定义
 
