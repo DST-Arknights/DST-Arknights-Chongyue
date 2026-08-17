@@ -21,25 +21,25 @@ name = T({
 })
 -- 版本更新说明（由发布脚本自动维护，请勿手动编辑）
 local UPDATE_EN = [[
+v2.1.1 (2026-08-18)
+- Migrated skill and talent activation/deactivation callbacks to the config interface
+---
 v2.1.0 (2026-08-18)
 - Refactored damage calculation to internal additive stacking via new chongyue_damage module
 - Replaced multiplicative logic with additive damage bonuses using SourceModifierList
 - Updated Skill 2 AOE attack logic to work with the new additive damage system
 - Corrected Skill 3 physical damage multiplier from 180% to 260% in Chinese and English locale files
----
-v2.0.5 (2026-08-07)
-- Added English language support, updated UI text language options
 ]]
 
 local UPDATE_ZH = [[
+v2.1.1 (2026-08-18)
+- 将技能和天赋的激活与停用回调迁移至配置接口
+---
 v2.1.0 (2026-08-18)
 - 重构伤害计算逻辑为内部加算，新增 chongyue_damage 模块
 - 使用 SourceModifierList 创建伤害加成加法器，替代原有乘算逻辑
 - 更新二技能 AOE 攻击等逻辑以适应新的伤害加成方式
 - 修正中英文语言文件中三技能描述的物理伤害倍率，由 180% 调整为 260%
----
-v2.0.5 (2026-08-07)
-- 添加英文语言支持，更新界面文本语言选项
 ]]
 
 description = T({
@@ -60,7 +60,7 @@ author = T({
     zh = "美工：xiaotianzihan 码师：夜雪 花菜 望月心灵",
     en = "Artist: xiaotianzihan Coder: 夜雪 花菜 望月心灵",
 })
-version = "2.1.0" -- 版本号
+version = "2.1.1" -- 版本号
 
 
 forumthread = ""

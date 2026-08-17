@@ -1,5 +1,10 @@
 # 版本更新记录
 
+## v2.1.1 (2026-08-18)
+
+[claude-code:unrecognized_model] {"model":"deepseek-v4-flash","query_source":"generate_session_title"}
+- Migrated skill and talent activation/deactivation callbacks to the config interface | 将技能和天赋的激活与停用回调迁移至配置接口
+
 ## v2.1.0 (2026-08-18)
 
 [claude-code:unrecognized_model] {"model":"deepseek-v4-flash","query_source":"generate_session_title"}
