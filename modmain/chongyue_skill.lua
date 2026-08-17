@@ -82,10 +82,7 @@ local function OnSkill1Install(skill)
   skill._currentActiveCostStacks = 1
   skill:ListenForEvent("onhitother", GenSkillHitRecoveryEnergyListener(skill))
   skill:ListenForEventWhileActivating("onhitother", OnSkill1HitOther)
-  -- 充能层数已并入加法器加成, 不再通过 DoAttack 的 instancemult 单独乘算
-  -- 激活/结束/装备切换/读档恢复时刷新加法器加成
-  skill:SetOnActivateEffect(function() RefreshSkill1DamageBonus(skill) end)
-  skill:SetOnDeactivate(function() RefreshSkill1DamageBonus(skill) end)
+  -- 激活/结束/读档恢复的加法器刷新由配置接口 OnActivateEffect/OnDeactivate 处理; 这里只处理装备切换
   skill:ListenForEventWhileActivating("equip", function() RefreshSkill1DamageBonus(skill) end)
   skill:ListenForEventWhileActivating("unequip", function() RefreshSkill1DamageBonus(skill) end)
 end
@@ -380,6 +377,8 @@ local skillConfig = { {
   activationMode = ARK_CONSTANTS.ACTIVATION_MODE.MANUAL,
   OnInstall = OnSkill1Install,
   OnActivate = OnSkill1Activate,
+  OnActivateEffect = function(skill) RefreshSkill1DamageBonus(skill) end,
+  OnDeactivate = function(skill) RefreshSkill1DamageBonus(skill) end,
   levels = { {
     desc = STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE[1][1],
     activationEnergy = 6,

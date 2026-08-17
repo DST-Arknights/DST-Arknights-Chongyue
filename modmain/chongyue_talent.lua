@@ -49,10 +49,7 @@ local function OnTalent1Install(talent)
       RefreshTalent1DamageBonus(target)
       return next(self, target, weapon, multiplier)
     end)
-  -- 天赋锁定时清掉加法器里的天赋加成
-  talent:SetOnDeactivate(function()
-    GetChongyueDamageAdder(inst):RemoveModifier(talent)
-  end)
+  -- 天赋锁定时清掉加法器里的天赋加成(由配置接口 OnDeactivate 处理)
 end
 
 local function OnTalent2Install(talent)
@@ -142,6 +139,9 @@ RegisterArkTalent({
     },
   },
   OnInstall = OnTalent1Install,
+  OnDeactivate = function(talent)
+    GetChongyueDamageAdder(talent.inst):RemoveModifier(talent)
+  end,
 })
 
 RegisterArkTalent({
