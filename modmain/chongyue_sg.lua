@@ -62,22 +62,49 @@ local AOE_MUST_TAGS = { "_combat" }
 local AOE_CANT_TAGS = { "INLIMBO", "wall", "companion", "DECOR", "invisible", "notarget", "noattack", "playerghost",
   "player" }
 
-local function ChongyueSkill2AoeAttack(inst, range, validFn, damageMultiplier)
+local function ChongyueSkill2AoeAttack(inst, range, validFn, damageBonus)
   local x, y, z = inst.Transform:GetWorldPosition()
   local targets = TheSim:FindEntities(x, y, z, range, AOE_MUST_TAGS, AOE_CANT_TAGS)
   local weapon = inst.components.combat:GetWeapon()
   local validTargets = {}
+  local adder = GetChongyueDamageAdder(inst)
   for i, ent in ipairs(targets) do
     if inst.replica.combat:IsValidTarget(ent) and (not validFn or validFn(ent)) then
       table.insert(validTargets, ent)
-      local targetDamageMultiplier = FunctionOrValue(damageMultiplier, ent)
+      -- 技能2 的 AOE 加成(倍率-1)并入内部加法器, 与天赋加成加算
+      local targetBonus = FunctionOrValue(damageBonus, ent) or 0
+      adder:SetModifier("chongyue_skill2_aoe", targetBonus)
       local dmg, spdmg = inst.components.combat:CalcDamage(ent, weapon, inst.components.combat.areahitdamagepercent)
-      dmg = dmg * (targetDamageMultiplier or 1)
+      adder:RemoveModifier("chongyue_skill2_aoe")
       inst:PushEvent("onareaattackother", { target = ent, weapon = weapon, stimuli = nil })
       ent.components.combat:GetAttacked(inst, dmg, weapon, nil, spdmg)
     end
   end
   return validTargets
+end
+
+-- 技能2 抬手: 命中所有目标并触发止戈(标记); 只有触发时已有止戈标记的目标才浮空.
+-- 不造成伤害, 伤害统一在放手段一次性结算. 返回触发前已标记的目标(供放手段额外 480% 结算)
+local function ChongyueSkill2MarkAndFloat(inst, range)
+  local x, y, z = inst.Transform:GetWorldPosition()
+  local targets = TheSim:FindEntities(x, y, z, range, AOE_MUST_TAGS, AOE_CANT_TAGS)
+  local markedEntities = {}
+  local talent1 = inst.components.ark_talent and inst.components.ark_talent:GetTalent("chongyue_talent1")
+  local hasTalent1 = talent1 and talent1:IsActivating()
+  for i, ent in ipairs(targets) do
+    if inst.replica.combat:IsValidTarget(ent) then
+      if hasTalent1 then
+        -- 触发前已有止戈标记的目标: 记录并浮空
+        if talent1:IsMarkedTarget(ent) then
+          table.insert(markedEntities, ent)
+          ApplyControl(ent, "chongyue_skill2_levitate", 0.5)
+        end
+        -- 命中的敌人必定触发止戈(标记), 供后续结算
+        talent1:MarkTarget(ent)
+      end
+    end
+  end
+  return markedEntities
 end
 
 local chongyue_skill2 = State({
@@ -112,40 +139,31 @@ local chongyue_skill2 = State({
       fx1.Transform:SetPosition(x, y + 4, z)
       local fx2 = SpawnPrefab("chongyue_skill2_fx_up")
       fx2.Transform:SetPosition(x, y, z)
-      local targets = ChongyueSkill2AoeAttack(inst, params.aoeRange, nil, params.aoeDamageMultiplier / 2) -- 两段伤害所以减半
-      local talent1MarkedEntities = {}
-      inst.sg.statemem.talent1MarkedEntities = talent1MarkedEntities
-      -- 查找天赋, 浮空
-      local talent1 = inst.components.ark_talent and inst.components.ark_talent:GetTalent("chongyue_talent1")
-      if talent1 and talent1:IsActivating() then
-        for i, ent in ipairs(targets) do
-          if inst.replica.combat:IsValidTarget(ent) then
-            if talent1:IsMarkedTarget(ent) then
-              table.insert(talent1MarkedEntities, ent)
-              ApplyControl(ent, "chongyue_skill2_levitate", 0.5)
-            end
-            talent1:MarkTarget(ent)
-          end
-        end
-      end
+      -- 抬手: 上挑命中, 只有已有止戈标记的目标浮空; 命中目标全部打标记(供后续结算), 不造成伤害
+      inst.sg.statemem.skill2MarkedEntities = ChongyueSkill2MarkAndFloat(inst, params.aoeRange)
     end),
     TimeEvent(30 * FRAMES, function(inst)
       inst.AnimState:PlayAnimation("chongyue_skill_2_end")
       local params = inst.sg.statemem.params
-      local talent1MarkedEntities = inst.sg.statemem.talent1MarkedEntities
       local x, y, z = inst.Transform:GetWorldPosition()
       local fx1 = SpawnPrefab("firering_fx")
       fx1.Transform:SetPosition(x, y, z)
       local fx2 = SpawnPrefab("chongyue_skill2_fx_down")
       fx2.Transform:SetPosition(x, y, z)
-      -- 第二段伤害
+      -- 放手: 一次性结算. 所有目标吃 AOE; 触发前已有止戈标记的目标额外吃 480%
+      local markedEntities = inst.sg.statemem.skill2MarkedEntities or {}
       local targets = ChongyueSkill2AoeAttack(inst, params.aoeRange, nil, function(ent)
-        local damageMultiplier = params.aoeDamageMultiplier / 2
-        if table.contains(talent1MarkedEntities, ent) then
-          damageMultiplier = damageMultiplier + params.talentDamageMultiplier
+        local bonus = params.aoeDamageMultiplier - 1
+        if table.contains(markedEntities, ent) then
+          bonus = bonus + (params.talentDamageMultiplier - 1)
         end
-        return damageMultiplier
-      end) -- 两段伤害所以减半, 已标记目标将额外伤害并入本次结算
+        return bonus
+      end)
+      -- 技能1 充能只喂给本次下砸: 结算后消耗, 不再被后续连携/普攻白嫖
+      local skill1 = inst.components.ark_skill and inst.components.ark_skill:GetSkill("chongyue_skill1")
+      if skill1 and skill1:IsActivating() then
+        skill1:CutBullet()
+      end
       -- 额外触发三技能效果
       local skill3 = inst.components.ark_skill and inst.components.ark_skill:GetSkill("chongyue_skill3")
       if skill3 then
@@ -158,12 +176,6 @@ local chongyue_skill2 = State({
           end
         end
       end
-      -- if skill1 and skill1:IsActivating() then
-      --   skill1:CutBullet()
-      -- end
-      -- if skill3 and skill3:IsActivating() then
-      --   skill3:CutBullet()
-      -- end
     end),
   },
 

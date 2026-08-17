@@ -35,15 +35,24 @@ local function OnTalent1Install(talent)
     end
   end)
 
+  -- 天赋1 的伤害倍率并入内部加法器: 按目标是否标记, 在每次伤害结算前写入/移除加成
+  local function RefreshTalent1DamageBonus(target)
+    local adder = GetChongyueDamageAdder(inst)
+    if target and talent:IsMarkedTarget(target) then
+      adder:SetModifier(talent, talent:GetLevelParams().damageMultiplier - 1)
+    else
+      adder:RemoveModifier(talent)
+    end
+  end
   talent:HookFunctionWhileActivating(inst.components.combat, "CalcDamage",
     function(next, self, target, weapon, multiplier)
-      multiplier = multiplier or 1
-      if talent:IsMarkedTarget(target) then
-        local damageMultiplier = talent:GetLevelParams().damageMultiplier
-        multiplier = multiplier * damageMultiplier
-      end
+      RefreshTalent1DamageBonus(target)
       return next(self, target, weapon, multiplier)
     end)
+  -- 天赋锁定时清掉加法器里的天赋加成
+  talent:SetOnDeactivate(function()
+    GetChongyueDamageAdder(inst):RemoveModifier(talent)
+  end)
 end
 
 local function OnTalent2Install(talent)

@@ -55,6 +55,7 @@ RegisterPOFile(GetModConfigData("language"), {
 AddModCharacter("chongyue", "MALE") --人物性别定义
 
 modimport("modmain/chongyue_actions.lua")
+modimport("modmain/chongyue_damage.lua")
 modimport("modmain/chongyue_sg.lua")
 modimport("modmain/chongyue_ui.lua")
 modimport("modmain/chongyue_recipes.lua")

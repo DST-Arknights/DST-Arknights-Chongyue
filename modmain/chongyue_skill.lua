@@ -64,29 +64,30 @@ local function OnSkill1HitOther(inst, data)
   end)
 end
 
-local function OnSkill1Install(skill)
+-- 技能1 空手普攻的伤害倍率写入内部加法器(与天赋/AOE 加算)
+-- 含充能层数: bonus = 倍率×充能层数-1, 保证技能1 单独普攻伤害不变(倍率×层数),
+-- 同时让二/三技能触发时也能携带三倍充能的伤害(充能不再只通过 DoAttack 的 instancemult 生效)
+local function RefreshSkill1DamageBonus(skill)
   local inst = skill.inst
+  local adder = GetChongyueDamageAdder(inst)
+  if skill:IsActivating() and IsUnarmed(inst) then
+    local stacks = skill._currentActiveCostStacks or 1
+    adder:SetModifier(skill, skill:GetLevelParams().damageMultiplier * stacks - 1)
+  else
+    adder:RemoveModifier(skill)
+  end
+end
+
+local function OnSkill1Install(skill)
   skill._currentActiveCostStacks = 1
   skill:ListenForEvent("onhitother", GenSkillHitRecoveryEnergyListener(skill))
   skill:ListenForEventWhileActivating("onhitother", OnSkill1HitOther)
-  skill:HookFunctionWhileActivating(inst.components.combat, "CalcDamage",
-    function(next, self, target, weapon, multiplier)
-      if IsUnarmed(inst) then
-        multiplier = multiplier or 1
-        local damageMultiplier = skill:GetLevelParams().damageMultiplier
-        multiplier = multiplier * damageMultiplier
-      end
-      local damage, spdamage = next(self, target, weapon, multiplier)
-      return damage, spdamage
-    end)
-  skill:HookFunctionWhileActivating(inst.components.combat, "DoAttack",
-    function(next, self, target, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos)
-      instancemult = instancemult or 1
-      if IsUnarmed(inst) and skill._currentActiveCostStacks > 1 then
-        instancemult = instancemult * skill._currentActiveCostStacks
-      end
-      next(self, target, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos)
-    end)
+  -- 充能层数已并入加法器加成, 不再通过 DoAttack 的 instancemult 单独乘算
+  -- 激活/结束/装备切换/读档恢复时刷新加法器加成
+  skill:SetOnActivateEffect(function() RefreshSkill1DamageBonus(skill) end)
+  skill:SetOnDeactivate(function() RefreshSkill1DamageBonus(skill) end)
+  skill:ListenForEventWhileActivating("equip", function() RefreshSkill1DamageBonus(skill) end)
+  skill:ListenForEventWhileActivating("unequip", function() RefreshSkill1DamageBonus(skill) end)
 end
 
 local function OnSkill1Activate(skill)
@@ -231,14 +232,18 @@ local function SetupSkill3Interface(skill)
     end
   end
 
-  function skill:DoSkillAreaAttack(pos)
+  function skill:DoSkillAreaAttack(pos, excludeEnt)
     local params = skill:GetLevelParams()
     local targets = TheSim:FindEntities(pos.x, pos.y, pos.z, params.aoeRange, AOE_MUST_TAGS, AOE_CANT_TAGS)
     local weapon = inst.components.combat:GetWeapon()
+    local adder = GetChongyueDamageAdder(inst)
     for i, ent in ipairs(targets) do
-      if inst.replica.combat:IsValidTarget(ent) then
+      -- 下次攻击场景: 主目标由普攻承担 2.6 倍伤害, AOE 只覆盖周围, 避免重复命中
+      if ent ~= excludeEnt and inst.replica.combat:IsValidTarget(ent) then
+        -- 技能3 的 AOE 加成并入内部加法器, 与天赋加成加算
+        adder:SetModifier("chongyue_skill3_aoe", params.aoeDamageMultiplier - 1)
         local dmg, spdmg = inst.components.combat:CalcDamage(ent, weapon, inst.components.combat.areahitdamagepercent)
-        dmg = dmg * params.aoeDamageMultiplier
+        adder:RemoveModifier("chongyue_skill3_aoe")
         ent.components.combat:GetAttacked(inst, dmg, weapon, nil, spdmg)
       end
     end
@@ -295,8 +300,14 @@ local function OnSkill3Install(skill)
         end
       end
       if skill:IsActivating() and IsUnarmed(inst) then
-        skill:DoSkillAreaAttack(target:GetPosition())
+        -- 下次攻击: 主目标的普攻合并进 AOE, 主目标与周围都造成 aoeDamageMultiplier(2.6) 倍伤害
+        skill:DoSkillAreaAttack(target:GetPosition(), target)
         skill:CutBullet()
+        local adder = GetChongyueDamageAdder(inst)
+        adder:SetModifier("chongyue_skill3_next", skill:GetLevelParams().aoeDamageMultiplier - 1)
+        next(self, target, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos)
+        adder:RemoveModifier("chongyue_skill3_next")
+        return
       end
       next(self, target, weapon, projectile, stimuli, instancemult, instrangeoverride, instpos)
     end)
@@ -449,7 +460,7 @@ local skillConfig = { {
     buffDuration = 20,
     bulletCount = 1,
     params = {
-      aoeDamageMultiplier = 4,
+      aoeDamageMultiplier = 2.6,
       -- 多重攻击次数
       additionalAttack = 1,
       aoeRange = 2.5,

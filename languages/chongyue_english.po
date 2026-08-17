@@ -117,8 +117,8 @@ msgstr "Elite 2 unlock - Reach max level and complete Elite training at the Trai
 
 #STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE.3.1
 msgctxt "STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE.3.1"
-msgid "Deals 180% ATK as Physical damage to the target and nearby enemies; after this skill has been used 5 times, Chongyue's attack range increases and attacks hit twice; this skill becomes auto-activated and deals damage an extra time"
-msgstr "Next basic attack deals 180% ATK as Physical damage to the target and nearby enemies.\nAfter 5 uses, attack range expands and attacks hit twice.\nSkill becomes auto-activated and deals an additional hit.\nUnarmed only."
+msgid "Deals 260% ATK as Physical damage to the target and nearby enemies; after this skill has been used 5 times, Chongyue's attack range increases and attacks hit twice; this skill becomes auto-activated and deals damage an extra time"
+msgstr "Next basic attack deals 260% ATK as Physical damage to the target and nearby enemies.\nAfter 5 uses, attack range expands and attacks hit twice.\nSkill becomes auto-activated and deals an additional hit.\nUnarmed only."
 
 #STRINGS.UI.ARK_TALENT.NAMES.CHONGYUE.1
 msgctxt "STRINGS.UI.ARK_TALENT.NAMES.CHONGYUE.1"

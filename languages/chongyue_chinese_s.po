@@ -118,8 +118,8 @@ msgstr "-精英化二解锁\n-等级满级后到训练站完成精英化"
 
 #STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE.3.1
 msgctxt "STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE.3.1"
-msgid "Deals 180% ATK as Physical damage to the target and nearby enemies; after this skill has been used 5 times, Chongyue's attack range increases and attacks hit twice; this skill becomes auto-activated and deals damage an extra time"
-msgstr "-下次普通攻击对目标及其周围造成相当于攻击力180%的物理伤害\n-累计使用五次技能攻击的范围扩大且攻击变为二连击，技能变为自动释放且造成额外一次伤害\n-限制空手触发"
+msgid "Deals 260% ATK as Physical damage to the target and nearby enemies; after this skill has been used 5 times, Chongyue's attack range increases and attacks hit twice; this skill becomes auto-activated and deals damage an extra time"
+msgstr "-下次普通攻击对目标及其周围造成相当于攻击力260%的物理伤害\n-累计使用五次技能攻击的范围扩大且攻击变为二连击，技能变为自动释放且造成额外一次伤害\n-限制空手触发"
 
 #STRINGS.UI.ARK_TALENT.NAMES.CHONGYUE.1
 msgctxt "STRINGS.UI.ARK_TALENT.NAMES.CHONGYUE.1"
