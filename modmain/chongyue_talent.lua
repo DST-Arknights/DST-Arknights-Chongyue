@@ -122,7 +122,7 @@ RegisterArkTalent({
     {
       desc = STRINGS.UI.ARK_TALENT.LEVEL_DESC.CHONGYUE[1][1],
       params = {
-        damageMultiplier = 1.55,
+        damageMultiplier = 1.45,
         probability = 0.18,
         -- 标记持续时间
         markDuration = 2.5,
@@ -131,7 +131,7 @@ RegisterArkTalent({
     {
       desc = STRINGS.UI.ARK_TALENT.LEVEL_DESC.CHONGYUE[1][2],
       params = {
-        damageMultiplier = 1.65,
+        damageMultiplier = 1.55,
         probability = 0.18,
         -- 标记持续时间
         markDuration = 2.5,
@@ -154,9 +154,9 @@ RegisterArkTalent({
       desc = STRINGS.UI.ARK_TALENT.LEVEL_DESC.CHONGYUE[2][1],
       params = {
         -- 击杀恢复技力
-        skillEnergy = 3,
+        skillEnergy = 2,
         -- 空手攻速加成
-        unarmedAttackSpeedMultiplier = 1.5,
+        unarmedAttackSpeedMultiplier = 1.4,
       },
     },
   },

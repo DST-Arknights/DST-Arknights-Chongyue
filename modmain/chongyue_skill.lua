@@ -235,7 +235,7 @@ local function SetupSkill3Interface(skill)
     local weapon = inst.components.combat:GetWeapon()
     local adder = GetChongyueDamageAdder(inst)
     for i, ent in ipairs(targets) do
-      -- 下次攻击场景: 主目标由普攻承担 2.6 倍伤害, AOE 只覆盖周围, 避免重复命中
+      -- 下次攻击场景: 主目标由普攻承担 4.0 倍伤害, AOE 只覆盖周围, 避免重复命中
       if ent ~= excludeEnt and inst.replica.combat:IsValidTarget(ent) then
         -- 技能3 的 AOE 加成并入内部加法器, 与天赋加成加算
         adder:SetModifier("chongyue_skill3_aoe", params.aoeDamageMultiplier - 1)
@@ -297,7 +297,7 @@ local function OnSkill3Install(skill)
         end
       end
       if skill:IsActivating() and IsUnarmed(inst) then
-        -- 下次攻击: 主目标的普攻合并进 AOE, 主目标与周围都造成 aoeDamageMultiplier(2.6) 倍伤害
+        -- 下次攻击: 主目标的普攻合并进 AOE, 主目标与周围都造成 aoeDamageMultiplier(4.0) 倍伤害
         skill:DoSkillAreaAttack(target:GetPosition(), target)
         skill:CutBullet()
         local adder = GetChongyueDamageAdder(inst)
@@ -385,7 +385,7 @@ local skillConfig = { {
     maxActivationStacks = 3,
     bulletCount = 1,
     params = {
-      damageMultiplier = 2,
+      damageMultiplier = 1.8,
     }
   }, {
     desc = STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE[1][2],
@@ -393,7 +393,7 @@ local skillConfig = { {
     maxActivationStacks = 3,
     bulletCount = 1,
     params = {
-      damageMultiplier = 3,
+      damageMultiplier = 2.4,
     }
   }, {
     desc = STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE[1][3],
@@ -401,7 +401,7 @@ local skillConfig = { {
     maxActivationStacks = 3,
     bulletCount = 1,
     params = {
-      damageMultiplier = 4,
+      damageMultiplier = 3.0,
     }
   } }
 }, {
@@ -422,18 +422,18 @@ local skillConfig = { {
     activationEnergy = 12,
     maxActivationStacks = 1,
     params = {
-      aoeDamageMultiplier = 3.5,
-      talentDamageMultiplier = 4.8,
+      aoeDamageMultiplier = 3.0,
+      talentDamageMultiplier = 3.4,
       aoeRange = 8,
       maxTargets = 4,
     }
   }, {
     desc = STRINGS.UI.ARK_SKILL.LEVEL_DESC.CHONGYUE[2][2],
     activationEnergy = 11,
-    maxActivationStacks = 1,
+    maxActivationStacks = 2,
     params = {
-      aoeDamageMultiplier = 4.5,
-      talentDamageMultiplier = 6.5,
+      aoeDamageMultiplier = 3.4,
+      talentDamageMultiplier = 3.8,
       aoeRange = 8,
       maxTargets = 4,
     }
@@ -459,7 +459,7 @@ local skillConfig = { {
     buffDuration = 20,
     bulletCount = 1,
     params = {
-      aoeDamageMultiplier = 2.6,
+      aoeDamageMultiplier = 4.0,
       -- 多重攻击次数
       additionalAttack = 1,
       aoeRange = 2.5,
