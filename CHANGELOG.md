@@ -1,5 +1,16 @@
 # 版本更新记录
 
+## v2.1.2 (2026-08-18)
+
+[claude-code:unrecognized_model] {"model":"deepseek-v4-flash","query_source":"generate_session_title"}
+- Rebalanced skill values so strength is ordered skill 3 > 2 > 1 | 数值平衡调整，技能强度按 3>2>1 排序
+- Skill 1 damageMultiplier reduced: 2/3/4 → 1.8/2.4/3.0 | 技能1 伤害倍率下调：2/3/4 → 1.8/2.4/3.0
+- Skill 2 damage multipliers reduced: L1 3.5/4.8 → 3.0/3.4, L2 4.5/6.5 → 3.4/3.8 | 技能2 伤害倍率下调：L1 3.5/4.8 → 3.0/3.4，L2 4.5/6.5 → 3.4/3.8
+- Skill 3 aoeDamageMultiplier restored to 4.0, recovering Elite 3 ultimate strength | 技能3 范围伤害倍率恢复至 4.0，还原精英三终极强度
+- Talent 1 stat multipliers reduced: 1.55/1.65 → 1.45/1.55 | 天赋1 属性倍率下调：1.55/1.65 → 1.45/1.55
+- Talent 2 skillEnergy reduced 3 → 2, bare-handed attack speed reduced 1.5 → 1.4 | 天赋2 skillEnergy 3 → 2，空手攻速 1.5 → 1.4
+- Synced updated Chinese and English skill/talent descriptions | 同步更新中英文技能与天赋描述
+
 ## v2.1.1 (2026-08-18)
 
 [claude-code:unrecognized_model] {"model":"deepseek-v4-flash","query_source":"generate_session_title"}
