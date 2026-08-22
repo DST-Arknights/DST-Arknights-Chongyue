@@ -24,7 +24,7 @@ local function SayActivateVoice(inst)
   -- 1-4随机
   local random = math.random(1, 4)
   local key = "CHONGYUE_SKILL_ACTIVATE_" .. random
-  SayAndVoice(inst, key, { talk = false })
+  SayAndVoice(inst, key, { text = false })
 end
 
 local SKILL3_LIGHT_MAX_STACKS = 5

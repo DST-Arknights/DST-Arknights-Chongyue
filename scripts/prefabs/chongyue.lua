@@ -169,9 +169,7 @@ local MasterPostInit = function(inst)
     requiredElite = 3,
     eliteLevelMap = { [3] = 1 },
   })
-  inst:AddComponent("i18n_talker")
-  inst.components.i18n_talker:SetupVoice("chongyue")
-  inst.components.i18n_talker:SetVoiceLang(TUNING.CHONGYUE.VOICE_LANG)
+  BindVoice(inst, "chongyue")
   inst:AddComponent("chongyue_qzbs")
   inst.components.chongyue_qzbs:SetOnCurrent(OnApplyQzbs)
 

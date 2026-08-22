@@ -66,6 +66,5 @@ DefineNetState("chongyue_qzbs", {
   current = "float:classified",
 })
 
-local voice = require("chongyue_voice")
-RegisterVoice("chongyue", voice)
+RegisterVoice("chongyue", "languages/chongyue_voice", { voice_lang = TUNING.CHONGYUE.VOICE_LANG })
 
