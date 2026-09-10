@@ -21,6 +21,12 @@ name = T({
 })
 -- 版本更新说明（由发布脚本自动维护，请勿手动编辑）
 local UPDATE_EN = [[
+v2.2.0 (2026-09-11)
+- Refactored voice registration logic, removed legacy voice files, and updated the voice paths
+- Removed the chongyue_actions module import from modmain
+- Migrated the changelog to a grouped Chinese-then-English format (Chinese first, English after)
+- Cleaned up AI CLI diagnostic log entries that had been mixed into the changelog
+---
 v2.1.2 (2026-08-18)
 - Rebalanced skill values so strength is ordered skill 3 > 2 > 1
 - Skill 1 damageMultiplier reduced: 2/3/4 → 1.8/2.4/3.0
@@ -29,12 +35,15 @@ v2.1.2 (2026-08-18)
 - Talent 1 stat multipliers reduced: 1.55/1.65 → 1.45/1.55
 - Talent 2 skillEnergy reduced 3 → 2, bare-handed attack speed reduced 1.5 → 1.4
 - Synced updated Chinese and English skill/talent descriptions
----
-v2.1.1 (2026-08-18)
-- Migrated skill and talent activation/deactivation callbacks to the config interface
 ]]
 
 local UPDATE_ZH = [[
+v2.2.0 (2026-09-11)
+- 重构语音注册逻辑，移除旧语音文件并更新语音路径
+- 移除 modmain 中的 chongyue_actions 模块导入
+- changelog 迁移为中英分组格式（中文在前，英文在后）
+- 清理 changelog 中混入的 AI CLI 诊断日志表
+---
 v2.1.2 (2026-08-18)
 - 数值平衡调整，技能强度按 3>2>1 排序
 - 技能1 伤害倍率下调：2/3/4 → 1.8/2.4/3.0
@@ -43,9 +52,6 @@ v2.1.2 (2026-08-18)
 - 天赋1 属性倍率下调：1.55/1.65 → 1.45/1.55
 - 天赋2 skillEnergy 3 → 2，空手攻速 1.5 → 1.4
 - 同步更新中英文技能与天赋描述
----
-v2.1.1 (2026-08-18)
-- 将技能和天赋的激活与停用回调迁移至配置接口
 ]]
 
 description = T({
@@ -66,7 +72,7 @@ author = T({
     zh = "美工：xiaotianzihan 码师：夜雪 花菜 望月心灵",
     en = "Artist: xiaotianzihan Coder: 夜雪 花菜 望月心灵",
 })
-version = "2.1.2" -- 版本号
+version = "2.2.0" -- 版本号
 
 
 forumthread = ""

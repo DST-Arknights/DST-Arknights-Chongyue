@@ -1,5 +1,18 @@
 # 版本更新记录
 
+## v2.2.0 (2026-09-11)
+
+- 重构语音注册逻辑，移除旧语音文件并更新语音路径
+- 移除 modmain 中的 chongyue_actions 模块导入
+- changelog 迁移为中英分组格式（中文在前，英文在后）
+- 清理 changelog 中混入的 AI CLI 诊断日志表
+
+---
+- Refactored voice registration logic, removed legacy voice files, and updated the voice paths
+- Removed the chongyue_actions module import from modmain
+- Migrated the changelog to a grouped Chinese-then-English format (Chinese first, English after)
+- Cleaned up AI CLI diagnostic log entries that had been mixed into the changelog
+
 ## v2.1.2 (2026-08-18)
 
 - 数值平衡调整，技能强度按 3>2>1 排序
