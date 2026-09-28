@@ -2,7 +2,7 @@ local function OnTalent1Install(talent)
   local inst = talent.inst
 
   function talent:MarkTarget(target)
-    if not talent:IsActivating() then return end
+    if not talent:IsUnlocked() then return end
     local params = talent:GetLevelParams()
     target:AddTag("an_end_to_war_marked")
     if not target._end_to_war_fx then
@@ -27,7 +27,7 @@ local function OnTalent1Install(talent)
   function talent:IsMarkedTarget(target)
     return target:HasTag("an_end_to_war_marked")
   end
-  talent:ListenForEventWhileActivating("onhitother", function(inst, data)
+  talent:ListenForEventWhileUnlocked("onhitother", function(inst, data)
     if not data or not data.target then return end
     local params = talent:GetLevelParams()
     if math.random() < params.probability then
@@ -44,12 +44,12 @@ local function OnTalent1Install(talent)
       adder:RemoveModifier(talent)
     end
   end
-  talent:HookFunctionWhileActivating(inst.components.combat, "CalcDamage",
+  talent:HookFunctionWhileUnlocked(inst.components.combat, "CalcDamage",
     function(next, self, target, weapon, multiplier)
       RefreshTalent1DamageBonus(target)
       return next(self, target, weapon, multiplier)
     end)
-  -- 天赋锁定时清掉加法器里的天赋加成(由配置接口 OnDeactivate 处理)
+  -- 天赋锁定时清掉加法器里的天赋加成（由 OnLocked 处理）
 end
 
 local function OnTalent2Install(talent)
@@ -59,7 +59,7 @@ local function OnTalent2Install(talent)
   local killCountSymbol = Symbol("all_are_guests_kill_count")
   local killTaskSymbol = Symbol("all_are_guests_kill_task")
   inst[killCountSymbol] = 0
-  talent:ListenForEventWhileActivating("killed", function (inst, data)
+  talent:ListenForEventWhileUnlocked("killed", function (inst, data)
     local ark_skill_comp = inst.components.ark_skill
     if not ark_skill_comp then return end
     local needCount = false
@@ -90,26 +90,26 @@ local function OnTalent2Install(talent)
   end)
   function talent:RefreshTalent2AttackSpeedMultiplier()
     local key = "chongyue_talent2_attack_speed"
-    if IsUnarmed(inst) then
+    if talent:IsUnlocked() and IsUnarmed(inst) then
       local params = talent:GetLevelParams()
       inst.components.combat.attackspeedmodifiers:SetModifier(inst, params.unarmedAttackSpeedMultiplier, key)
     else
       inst.components.combat.attackspeedmodifiers:SetModifier(inst, 1, key)
     end
   end
-  talent:ListenForEventWhileActivating("equip", function()
+  talent:ListenForEventWhileUnlocked("equip", function()
     talent:RefreshTalent2AttackSpeedMultiplier()
   end)
-  talent:ListenForEventWhileActivating("unequip", function()
+  talent:ListenForEventWhileUnlocked("unequip", function()
     talent:RefreshTalent2AttackSpeedMultiplier()
   end)
 end
 
-local function OnTalent2Activate(talent)
+local function OnTalent2Unlocked(talent)
   talent:RefreshTalent2AttackSpeedMultiplier()
 end
 
-local function OnTalent2Deactivate(talent)
+local function OnTalent2Locked(talent)
   talent:RefreshTalent2AttackSpeedMultiplier()
 end
 
@@ -139,7 +139,7 @@ RegisterArkTalent({
     },
   },
   OnInstall = OnTalent1Install,
-  OnDeactivate = function(talent)
+  OnLocked = function(talent)
     GetChongyueDamageAdder(talent.inst):RemoveModifier(talent)
   end,
 })
@@ -161,6 +161,6 @@ RegisterArkTalent({
     },
   },
   OnInstall = OnTalent2Install,
-  OnActivate = OnTalent2Activate,
-  OnDeactivate = OnTalent2Deactivate,
+  OnUnlocked = OnTalent2Unlocked,
+  OnLocked = OnTalent2Locked,
 })

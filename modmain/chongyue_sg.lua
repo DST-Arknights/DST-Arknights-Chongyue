@@ -90,7 +90,7 @@ local function ChongyueSkill2MarkAndFloat(inst, range)
   local targets = TheSim:FindEntities(x, y, z, range, AOE_MUST_TAGS, AOE_CANT_TAGS)
   local markedEntities = {}
   local talent1 = inst.components.ark_talent and inst.components.ark_talent:GetTalent("chongyue_talent1")
-  local hasTalent1 = talent1 and talent1:IsActivating()
+  local hasTalent1 = talent1 and talent1:IsUnlocked()
   for i, ent in ipairs(targets) do
     if inst.replica.combat:IsValidTarget(ent) then
       if hasTalent1 then
