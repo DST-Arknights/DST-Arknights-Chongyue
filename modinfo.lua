@@ -161,5 +161,5 @@ configuration_options = {
 
 }
 mod_dependencies = {
-    {["DST-ArknightsItemPackage"] = false},
+    {["DST-Arknights-Nexus"] = false},
 }
