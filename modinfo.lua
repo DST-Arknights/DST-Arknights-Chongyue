@@ -19,29 +19,29 @@ name = T({
     zh = "重岳",
     en = "Chongyue",
 })
-version = "2.2.1" -- 版本号
+version = "2.2.2" -- 版本号
 
 -- 版本更新说明（由发布脚本自动维护，请勿手动编辑）
 local UPDATE_EN = [[
+v2.2.2 (2026-10-24)
+- QZBS now recharges 1 point at a time; each positive recovery costs at least 1 supply, with no recharge when under 1 supply remains or when QZBS is full; skill-first charging and QZBS loss-pause behavior are preserved.
+- Fixed a spawn crash for Chongyue with Nexus 2.12.1; QZBS supply charging now runs after the default skill handler and consumes only remaining supply.
+- The current version is now shown in both mod descriptions.
+- Migrated the dependency to Arknights Nexus.
+---
 v2.2.1 (2026-10-01)
 - No user-visible changes.
----
-v2.2.0 (2026-09-11)
-- Refactored voice registration logic, removed legacy voice files, and updated the voice paths
-- Removed the chongyue_actions module import from modmain
-- Migrated the changelog to a grouped Chinese-then-English format (Chinese first, English after)
-- Cleaned up AI CLI diagnostic log entries that had been mixed into the changelog
 ]]
 
 local UPDATE_ZH = [[
+v2.2.2 (2026-10-24)
+- QZBS 现在每次只充能 1 点；每次有效恢复至少消耗 1 点 supply，supply 不足 1 点或 QZBS 已满时不充能且不消耗；保留技能优先与 QZBS 损失暂停行为。
+- 修复 Chongyue 在 Nexus 2.12.1 下生成时崩溃的问题；QZBS 的 supply 充能现在排在默认技能处理器之后，仅消耗剩余 supply。
+- 两个模组描述中均显示当前版本号。
+- 依赖迁移至 Arknights Nexus。
+---
 v2.2.1 (2026-10-01)
 - 无用户可见改动。
----
-v2.2.0 (2026-09-11)
-- 重构语音注册逻辑，移除旧语音文件并更新语音路径
-- 移除 modmain 中的 chongyue_actions 模块导入
-- changelog 迁移为中英分组格式（中文在前，英文在后）
-- 清理 changelog 中混入的 AI CLI 诊断日志表
 ]]
 
 description = T({

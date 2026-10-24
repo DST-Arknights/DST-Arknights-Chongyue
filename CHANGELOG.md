@@ -1,5 +1,17 @@
 # 版本更新记录
 
+## v2.2.2 (2026-10-24)
+
+- QZBS 现在每次只充能 1 点；每次有效恢复至少消耗 1 点 supply，supply 不足 1 点或 QZBS 已满时不充能且不消耗；保留技能优先与 QZBS 损失暂停行为。
+- 修复 Chongyue 在 Nexus 2.12.1 下生成时崩溃的问题；QZBS 的 supply 充能现在排在默认技能处理器之后，仅消耗剩余 supply。
+- 两个模组描述中均显示当前版本号。
+- 依赖迁移至 Arknights Nexus。
+---
+- QZBS now recharges 1 point at a time; each positive recovery costs at least 1 supply, with no recharge when under 1 supply remains or when QZBS is full; skill-first charging and QZBS loss-pause behavior are preserved.
+- Fixed a spawn crash for Chongyue with Nexus 2.12.1; QZBS supply charging now runs after the default skill handler and consumes only remaining supply.
+- The current version is now shown in both mod descriptions.
+- Migrated the dependency to Arknights Nexus.
+
 ## v2.2.1 (2026-10-01)
 
 - 无用户可见改动。
