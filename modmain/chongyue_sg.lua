@@ -26,7 +26,7 @@ AddStategraphPostInit("wilson", function(sg)
   local OldAttackOnEnter = sg.states["attack"].onenter
   sg.states["attack"].onenter = function(inst, ...)
     OldAttackOnEnter(inst, ...)
-    if inst:HasTag("chongyue_punch_attack") and IsSGPunchAttack(inst) then
+    if inst:HasTag("chongyue") and IsSGPunchAttack(inst) then
       local punchAttackAnim = "punch"
       if IsSkillActivating(inst, "chongyue_skill3") then
         punchAttackAnim = "chongyue_skill_3_loop_a"
@@ -44,7 +44,7 @@ AddStategraphPostInit("wilson_client", function(sg)
   local OldAttackOnEnter = sg.states["attack"].onenter
   sg.states["attack"].onenter = function(inst, ...)
     OldAttackOnEnter(inst, ...)
-    if inst:HasTag("chongyue_punch_attack") and IsSGPunchAttack(inst) then
+    if inst:HasTag("chongyue") and IsSGPunchAttack(inst) then
       local punchAttackAnim = "punch"
       if IsSkillActivating(inst, "chongyue_skill3") then
         punchAttackAnim = "chongyue_skill_3_loop_a"

@@ -1,7 +1,7 @@
 --界面部分
 local QzbsBadge = require("widgets/qzbsbadge")
 local function Add_Qzbs(self)
-	if not self.owner or not self.owner:HasTag("chongyue_qzbs") then
+	if not self.owner or not self.owner:HasTag("chongyue") then
 		return
 	end
 
@@ -48,7 +48,7 @@ AddClassPostConstruct("widgets/statusdisplays", Add_Qzbs)
 
 local wxwb = require("widgets/sptext")                      --sp 3
 local function SPtext(self)
-	if not self.owner or not self.owner:HasTag("chongyue_qzbs") then --如果没有组件的话
+	if not self.owner or not self.owner:HasTag("chongyue") then
 		return
 	end
 	self.sptext = self:AddChild(wxwb(self.owner))

@@ -96,18 +96,11 @@ local function OnHitOther(inst, data)
   inst.components.chongyue_qzbs:DoDelta(delta)
 end
 
-local function GetQzbsRechargeAmount(inst, charger, data)
+local function RechargeQzbs(inst, charger, availableCharge)
   if not inst.components.chongyue_qzbs then
     return 0
   end
-  return inst.components.chongyue_qzbs:GetRechargeAmount()
-end
-
-local function RechargeQzbs(inst, charger, amount, data)
-  if not inst.components.chongyue_qzbs then
-    return 0
-  end
-  return inst.components.chongyue_qzbs:Recharge(amount)
+  return inst.components.chongyue_qzbs:Recharge(availableCharge)
 end
 
 local function OnSave(inst, data)
@@ -122,9 +115,7 @@ end
 local CommonPostInit = function(inst)
   -- Minimap icon
   inst.MiniMapEntity:SetIcon("chongyue.tex")
-  inst:AddTag("chongyue_qzbs")
   inst:AddTag("chongyue")
-  inst:AddTag("chongyue_punch_attack")
   inst:AddTag("ark_character")
 end
 -- server only
@@ -132,8 +123,6 @@ local MasterPostInit = function(inst)
   inst.starting_inventory = start_inv[TheNet:GetServerGameMode()] or start_inv.default
 
   inst.soundsname = "wilson"
-
-  inst:AddTag("cy_ksl")
 
   inst.components.health:SetMaxHealth(TUNING.CHONGYUE_HEALTH)
   inst.components.hunger:SetMax(TUNING.CHONGYUE_HUNGER)
@@ -174,10 +163,10 @@ local MasterPostInit = function(inst)
   inst.components.chongyue_qzbs:SetOnCurrent(OnApplyQzbs)
 
   inst:AddComponent("ark_supply_rechargeable")
-  inst.components.ark_supply_rechargeable:AddRechargeGroup("chongyue_qzbs", {
-    getrechargeamountfn = GetQzbsRechargeAmount,
-    rechargefn = RechargeQzbs,
-  })
+  -- 先由物品包安装默认技能充能，再追加百式充能。
+  inst:DoTaskInTime(0, function()
+    inst.components.ark_supply_rechargeable:AddRechargeHandler("chongyue_qzbs", RechargeQzbs)
+  end)
 
   inst:ListenForEvent("hungerdelta", OnHungerDelta)
   inst:ListenForEvent("onhitother", OnHitOther)

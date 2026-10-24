@@ -19,6 +19,8 @@ name = T({
     zh = "重岳",
     en = "Chongyue",
 })
+version = "2.2.1" -- 版本号
+
 -- 版本更新说明（由发布脚本自动维护，请勿手动编辑）
 local UPDATE_EN = [[
 v2.2.1 (2026-10-01)
@@ -48,19 +50,18 @@ description = T({
 此前担任移动城市玉门的武术教官
 已卸任
 
-]] .. UPDATE_ZH,
+当前版本: ]] .. version .. "\n" .. UPDATE_ZH,
     en = [[The elder brother of the year, evening, and order of the ship's personnel
 He has close contact with government departments such as the Ministry of War and the Sui Tai of the Flame Country
 He previously served as a martial arts instructor for the mobile city Yumen
 He has retired
 
-]] .. UPDATE_EN,
+Current version: ]] .. version .. "\n" .. UPDATE_EN,
 })
 author = T({
     zh = "美工：xiaotianzihan 码师：夜雪 花菜 望月心灵",
     en = "Artist: xiaotianzihan Coder: 夜雪 花菜 望月心灵",
 })
-version = "2.2.1" -- 版本号
 
 
 forumthread = ""
